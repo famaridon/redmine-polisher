@@ -1,0 +1,34 @@
+{
+  "manifest_version": 2,
+
+  "name": "Visiativ Redmine issues polisher",
+  "description": "This extension polish issuses display",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://projects.visiativ.com/*/issues*"
+      ],
+      "css": [
+        "redmine.css",
+        "js/tooltipster/css/tooltipster.core.css",
+        "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css"
+      ],
+      "js": [
+        "js/jquery-3.1.1.js",
+        "js/jquery.treetable.js",
+        "redmine.js",
+        "js/tooltipster/js/tooltipster.bundle.js"
+      ]
+    }
+  ],
+  "permissions": [
+    "webNavigation"
+  ],
+   "web_accessible_resources": [
+       "images/*"
+     ]
+}

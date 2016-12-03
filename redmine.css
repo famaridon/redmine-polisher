@@ -1,0 +1,71 @@
+
+span.icon{
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+  padding-left: 2px;
+  background-size: auto auto;
+  background-repeat: no-repeat;
+}
+
+.icon.icon-user-story{
+  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/user-story.png");
+}
+
+.icon.icon-task{
+  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/task.png");
+}
+
+.icon.icon-defect{
+  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/bug.png");
+}
+
+.icon.icon-urgent{
+  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/priority/urgent.png");
+}
+
+.icon.icon-haut{
+  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/priority/haut.png");
+}
+
+.icon.icon-normal{
+  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/priority/normal.png");
+}
+
+.icon.icon-bas{
+  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/priority/bas.png");
+}
+
+.icon.icon-arrow-right{
+  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/arrow-right.png");
+}
+
+tr.issue.odd{
+  background: transparent;
+}
+
+
+/* data tree */
+.data-tt-expender{
+  transition: all 0.5s ease;
+}
+
+span.icon.data-tt-expender{
+  transition: all 0.5s ease;
+  height: 16px;
+  width: 16px;
+  background-size: auto auto;
+  padding: 0 5px 0 0;
+}
+
+.collapsed .data-tt-expender{
+  transform: rotate(0deg);
+}
+
+.expanded .data-tt-expender {
+  transform: rotate(90deg);
+}
+
+.tooltipster-box #content{
+  width: 100%;
+}
