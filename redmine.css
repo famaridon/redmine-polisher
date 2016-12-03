@@ -40,12 +40,14 @@ span.icon{
   background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/arrow-right.png");
 }
 
-tr.issue.odd{
-  background: transparent;
-}
-
-
 /* data tree */
+
+.indenter{
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  padding: 0 5px 0 0;
+}
 .data-tt-expender{
   transition: all 0.5s ease;
 }
@@ -54,8 +56,8 @@ span.icon.data-tt-expender{
   transition: all 0.5s ease;
   height: 16px;
   width: 16px;
+  padding: 0 0 0 0;
   background-size: auto auto;
-  padding: 0 5px 0 0;
 }
 
 .collapsed .data-tt-expender{
@@ -68,4 +70,22 @@ span.icon.data-tt-expender{
 
 .tooltipster-box #content{
   width: 100%;
+}
+
+tr.odd.issue.child, tr.even.issue.child {
+  background: #f6f7f8 !important;
+}
+
+
+/*Reset priority bg color*/
+tr.odd.priority-highest, tr.odd.priority-high2, tr.odd.priority-high3, tr.odd.priority-lowest, tr.odd.priority-default {
+  background: #fff !important;
+}
+
+tr.even.priority-highest, tr.even.priority-high2, tr.even.priority-high3, tr.even.priority-lowest, tr.even.priority-default {
+  background: #fff !important;
+}
+
+tr.even.priority-highest td, tr.odd.priority-highest td, tr.even.priority-high4 td, tr.odd.priority-high2 td, tr.even.priority-high3 td, tr.odd.priority-high3 td, tr.even.priority-lowest td, tr.odd.priority-lowest td {
+  border-color: #e4e4e4 !important;
 }
