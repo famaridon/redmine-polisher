@@ -32,6 +32,7 @@ function buildParentLink(issue, parent){
 
 $( document ).ready(function() {
   console.log( "Redmine tools started" );
+  console.log( "Issues" );
 
   // rebuild all DOM
   $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();

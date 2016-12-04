@@ -9,35 +9,35 @@ span.icon{
 }
 
 .icon.icon-user-story{
-  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/user-story.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/user-story.png");
 }
 
 .icon.icon-task{
-  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/task.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/task.png");
 }
 
 .icon.icon-defect{
-  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/bug.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/bug.png");
 }
 
 .icon.icon-urgent{
-  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/priority/urgent.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/urgent.png");
 }
 
 .icon.icon-haut{
-  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/priority/haut.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/haut.png");
 }
 
 .icon.icon-normal{
-  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/priority/normal.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/normal.png");
 }
 
 .icon.icon-bas{
-  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/priority/bas.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/bas.png");
 }
 
 .icon.icon-arrow-right{
-  background-image: url("chrome-extension://ipiofmeccekhaiagbcneoopacphjlkei/images/arrow-right.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/arrow-right.png");
 }
 
 /* data tree */
