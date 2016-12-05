@@ -4,7 +4,7 @@ function rebuildIssue(issue){
   // set the issue id in data- for treetable
   issue.attr('data-tt-id', issue.attr('id').split('-')[1])
 
-  rebuildTracker(issue.find("td.tracker"));
+  rebuildTracker(issue,issue.find("td.tracker"));
 
   rebuildPriority(issue.find("td.priority"));
 
@@ -14,11 +14,11 @@ function rebuildIssue(issue){
 
 }
 
-function rebuildTracker(tracker){
+function rebuildTracker(issue,tracker){
   var html = tracker.html();
-  var simpleTarckerHtml = html.substring("R&amp;D INNOVATION - ".length, html.length);
-  simpleTarckerHtml = simpleTarckerHtml.toLowerCase().replace(new RegExp(' ', 'g'),'-')
-  tracker.html('<span class="icon icon-'+simpleTarckerHtml+'"></span>');
+  var simpleTrackerHtml = html.substring("R&amp;D INNOVATION - ".length, html.length);
+  simpleTrackerHtml = simpleTrackerHtml.toLowerCase().replace(new RegExp(' ', 'g'),'-')
+  issue.find("td.subject").prepend($('<span class="icon icon-'+simpleTrackerHtml+'"></span>'))
 }
 
 function rebuildPriority(priority){
@@ -55,27 +55,32 @@ function collapseIssues(){
 
 $( document ).ready(function() {
   console.log( "Redmine tools started" );
-  console.log( "Issues" );
 
   // rebuild all DOM
+  $('.list.issues th[title=\'Trier par "Tracker"\']').remove();
   $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();
 
   $("tr.issue").each(function(index, value){
     var issue = $(value);
     rebuildIssue(issue);
     issue.find("td.parent").remove();
+    issue.find("td.tracker").remove();
   });
 
-  // set the subject width after all to get the max size.
-  $("tr.issue td.subject").each(function(index, item){
-    //sadness
-    var initialWidth = $(item).width();
-    $(item).find("a").width(initialWidth - 25).css({
+
+  $("tr.issue").each(function(index, issue){
+    // set the subject width after all to get the max size.
+    var subject = $(issue).find("td.subject");
+    var initialWidth = subject.width();
+    $(subject).find("a").width(initialWidth - 65).css({
       'display':'inline-block',
       'white-space':'nowrap',
       'overflow':'hidden',
       'text-overflow':'ellipsis'
     });
+    if($(issue).hasClass("child") && !$("#issue-" + $(issue).attr("data-tt-parent-id")).length){
+      $(issue).addClass("isolated-child");
+    }
   });
 
   // start tree table
@@ -92,7 +97,6 @@ $( document ).ready(function() {
   $("#query_form_with_buttons p.buttons").append(expandAllButton);
   var collapseAllButton = $("<a class=\"icon icon-arrow-up collapse-all-button\">Collapse all</a>").css("cursor","pointer").on('click',collapseIssues);
   $("#query_form_with_buttons p.buttons").append(collapseAllButton);
-
 
   // start tooltipster
   /*  $('.subject').tooltipster({

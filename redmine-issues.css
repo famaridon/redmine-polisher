@@ -154,3 +154,18 @@ tr.child > td:first-child {
 .parent .subject{
     font-weight: bold;
 }
+
+td.subject .icon{
+  margin-right: 5px;
+}
+
+tr.child td.subject .icon{
+  margin-left: 10px;
+}
+
+tr.isolated-child td.id{
+  background-color: #ca1e1e !important;
+}
+
+tr.isolated-child td.id a{
+  color: white !important;
