@@ -1,3 +1,5 @@
+var issuesTable = $(".list.issues");
+
 function rebuildIssue(issue){
   // set the issue id in data- for treetable
   issue.attr('data-tt-id', issue.attr('id').split('-')[1])
@@ -6,7 +8,10 @@ function rebuildIssue(issue){
 
   rebuildPriority(issue.find("td.priority"));
 
+  rebuildFixedVersion(issue.find("td.fixed_version"));
+
   buildParentLink(issue, issue.find("td.parent a"));
+
 }
 
 function rebuildTracker(tracker){
@@ -21,6 +26,16 @@ function rebuildPriority(priority){
   priority.html('<span class="icon icon-'+priorityIcon+'"></span>');
 }
 
+function rebuildFixedVersion(version){
+  if(version.length){
+    var html = version.find("a").html();
+    if(html.startsWith("Moovapps Process - ")){
+      var simpleVersionHtml = html.substring("Moovapps Process - ".length, html.length);
+      version.find("a").html(simpleVersionHtml);
+    }
+  }
+}
+
 function buildParentLink(issue, parent){
   if(typeof parent.attr('href') !== 'undefined')
   {
@@ -28,6 +43,14 @@ function buildParentLink(issue, parent){
     issue.attr('data-tt-parent-id',parentId);
     $('#issue-'+parentId).after(issue);
   }
+}
+
+function expandIssues(){
+  issuesTable.treetable('expandAll');
+}
+
+function collapseIssues(){
+  issuesTable.treetable('collapseAll');
 }
 
 $( document ).ready(function() {
@@ -43,12 +66,33 @@ $( document ).ready(function() {
     issue.find("td.parent").remove();
   });
 
+  // set the subject width after all to get the max size.
+  $("tr.issue td.subject").each(function(index, item){
+    //sadness
+    var initialWidth = $(item).width();
+    $(item).find("a").width(initialWidth - 25).css({
+      'display':'inline-block',
+      'white-space':'nowrap',
+      'overflow':'hidden',
+      'text-overflow':'ellipsis'
+    });
+  });
+
   // start tree table
-  $(".list.issues").treetable({
-    'column': 5,
+  var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();
+  subjectColumn = subjectColumn === -1 ? 1 : subjectColumn;
+  var issuesTreetable = issuesTable.treetable({
+    'column': subjectColumn,
     'expandable': true,
+    'initialState' : 'expanded',
     'expanderTemplate':'<span class="data-tt-expender  icon icon-arrow-right"></span>'
   });
+
+  var expandAllButton = $("<a class=\"icon icon-arrow-down expand-all-button\">Expand all</a>").css("cursor","pointer").on('click',expandIssues);
+  $("#query_form_with_buttons p.buttons").append(expandAllButton);
+  var collapseAllButton = $("<a class=\"icon icon-arrow-up collapse-all-button\">Collapse all</a>").css("cursor","pointer").on('click',collapseIssues);
+  $("#query_form_with_buttons p.buttons").append(collapseAllButton);
+
 
   // start tooltipster
   /*  $('.subject').tooltipster({

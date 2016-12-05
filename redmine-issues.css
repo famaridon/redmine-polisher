@@ -1,10 +1,10 @@
 
 span.icon{
   display: inline-block;
-  height: 24px;
-  width: 24px;
-  padding-left: 2px;
-  background-size: auto auto;
+  height: 16px;
+  width: 16px;
+  padding: 0 !important;
+  background-size: 16px 16px;
   background-repeat: no-repeat;
 }
 
@@ -36,16 +36,22 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/bas.png");
 }
 
+.icon.icon-arrow-up{
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/arrow-up.png");
+}
 .icon.icon-arrow-right{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/arrow-right.png");
+}
+.icon.icon-arrow-down{
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/arrow-down.png");
+}
+.icon.icon-arrow-left{
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/arrow-left.png");
 }
 
 /* data tree */
 
 .indenter{
-  display: inline-block;
-  height: 16px;
-  width: 16px;
   padding: 0 5px 0 0;
 }
 .data-tt-expender{
@@ -78,14 +84,58 @@ tr.odd.issue.child, tr.even.issue.child {
 
 
 /*Reset priority bg color*/
-tr.odd.priority-highest, tr.odd.priority-high2, tr.odd.priority-high3, tr.odd.priority-lowest, tr.odd.priority-default {
+tr.odd.priority-highest,
+tr.odd.priority-high2,
+tr.odd.priority-high3,
+tr.odd.priority-lowest,
+tr.odd.priority-default {
   background: #fff !important;
 }
 
-tr.even.priority-highest, tr.even.priority-high2, tr.even.priority-high3, tr.even.priority-lowest, tr.even.priority-default {
+tr.even.priority-highest,
+tr.even.priority-high2,
+tr.even.priority-high3,
+tr.even.priority-lowest,
+tr.even.priority-default {
   background: #fff !important;
 }
 
-tr.even.priority-highest td, tr.odd.priority-highest td, tr.even.priority-high4 td, tr.odd.priority-high2 td, tr.even.priority-high3 td, tr.odd.priority-high3 td, tr.even.priority-lowest td, tr.odd.priority-lowest td {
+tr.even.priority-highest td,
+tr.odd.priority-highest td,
+tr.even.priority-high4 td,
+tr.odd.priority-high2 td,
+tr.even.priority-high3 td,
+tr.odd.priority-high3 td,
+tr.even.priority-lowest td,
+tr.odd.priority-lowest td {
   border-color: #e4e4e4 !important;
+}
+
+/* Reset child issue style  */
+tr.issue.idnt td.subject{
+  background: transparent !important;
+}
+
+tr.issue.idnt-1 td.subject,
+tr.issue td.subject {
+  padding-left: 0 !important;
+}
+
+.indenter{
+  margin-left: 5px;
+}
+.ellipsis {
+  display: inline-block;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.assigned_to .user{
+  white-space: nowrap;
+}
+
+.issues .issue{
+  font-size: 12px;
+  font-family: arial;
 }
