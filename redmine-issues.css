@@ -59,6 +59,7 @@ span.icon{
 }
 
 span.icon.data-tt-expender{
+  cursor: pointer;
   transition: all 0.5s ease;
   height: 16px;
   width: 16px;
@@ -138,4 +139,18 @@ tr.issue td.subject {
 .issues .issue{
   font-size: 12px;
   font-family: arial;
+}
+
+tr.parent > td:first-child {
+    border-left: 2px solid #d7d7d7 !important;
+    border-left-color : #d7d7d7 !important;
+}
+
+tr.child > td:first-child {
+    border-left: 2px solid #2996cc !important;
+    border-left-color : #2996cc !important;
+}
+
+.parent .subject{
+    font-weight: bold;
 }
