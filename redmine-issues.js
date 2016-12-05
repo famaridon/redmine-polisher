@@ -27,12 +27,10 @@ function rebuildPriority(priority){
 }
 
 function rebuildFixedVersion(version){
-  if(version.length){
-    var html = version.find("a").html();
-    if(typeof(html) != 'undefined' && html.startsWith("Moovapps Process - ")){
-      var simpleVersionHtml = html.substring("Moovapps Process - ".length, html.length);
-      version.find("a").html(simpleVersionHtml);
-    }
+  var html = version.find("a").html();
+  if(typeof(html) != 'undefined' && html.startsWith("Moovapps Process - ")){
+    var simpleVersionHtml = html.substring("Moovapps Process - ".length, html.length);
+    version.find("a").html(simpleVersionHtml);
   }
 }
 
