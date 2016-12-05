@@ -27,12 +27,10 @@ function rebuildPriority(priority){
 }
 
 function rebuildFixedVersion(version){
-  if(version.length){
-    var html = version.find("a").html();
-    if(html.startsWith("Moovapps Process - ")){
-      var simpleVersionHtml = html.substring("Moovapps Process - ".length, html.length);
-      version.find("a").html(simpleVersionHtml);
-    }
+  var html = version.find("a").html();
+  if(typeof(html) != 'undefined' && html.startsWith("Moovapps Process - ")){
+    var simpleVersionHtml = html.substring("Moovapps Process - ".length, html.length);
+    version.find("a").html(simpleVersionHtml);
   }
 }
 
@@ -99,31 +97,41 @@ $( document ).ready(function() {
   $("#query_form_with_buttons p.buttons").append(collapseAllButton);
 
   // start tooltipster
-  /*  $('.subject').tooltipster({
-  content: 'Loading...',
-  contentAsHTML: true,
-  interactive: true,
-  theme: 'tooltipster-shadow',
-  trigger: 'click',
-  functionBefore: function(instance, helper){
-  var $origin = $(helper.origin);
+  $('.subject').tooltipster({
+    content: 'Loading...',
+    contentAsHTML: true,
+    functionBefore: function(instance, helper){
 
-  // we set a variable so the data is only loaded once via Ajax, not every time the tooltip opens
-  if ($origin.data('loaded') !== true) {
+      var $origin = $(helper.origin);
 
-  $.get($origin.find("a").attr('href'), function(data) {
+      chrome.storage.sync.get({
+        redmineAPIKey: null
+      }, function(items) {
+        if(items.redmineAPIKey != null && $origin.data('loaded') !== true)
+        {
 
-  var issueDetails = $.parseHTML(data);
+          var issueId = $origin.parent().data('tt-id');
+          $.ajax({
+            method: "GET",
+            url: "https://projects.visiativ.com/issues/"+issueId+".json",
+            headers: {
+              'X-Redmine-API-Key': items.redmineAPIKey
+            },
+            success : function(data){
 
-  // call the 'content' method to update the content of our tooltip with the returned data.
-  // note: this content update will trigger an update animation (see the updateAnimation option)
-  instance.content($(issueDetails).find("#content"));
 
-  // to remember that the data has been loaded
-  $origin.data('loaded', true);
-});
-}
-}
-});
-*/
+              var title =$('<dt>Title</dt><dd>'+data.issue.subject+'</dd>');
+              var description =$('<dt>Description</dt><dd>'+data.issue.description+'</dd>');
+
+              var dom = $('<dl class="dl-horizontal"></dl>').append(title).append(description);
+              instance.content(dom);
+              // to remember that the data has been loaded
+              $origin.data('loaded', true);
+            }
+          });
+        }
+      });
+    }
+  });
+
 });

@@ -55,7 +55,7 @@ span.icon{
   padding: 0 5px 0 0;
 }
 .data-tt-expender{
-  transition: all 0.5s ease;
+  transition: all 0.25s ease;
 }
 
 span.icon.data-tt-expender{
@@ -167,5 +167,16 @@ tr.isolated-child td.id{
   background-color: #ca1e1e !important;
 }
 
-tr.isolated-child td.id a{
+tr.isolated-child .indenter{
+  display: none;
+}
+
+tr.isolated-child td.id a {
   color: white !important;
+}
+
+/* tooltips*/
+
+.tooltip h3{
+  color: #fff;
+}
