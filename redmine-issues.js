@@ -126,9 +126,9 @@ $( document ).ready(function() {
 
 
               var title =$('<h3>'+data.issue.subject+'</h3>');
-              var description =$('<dt>Description</dt><dd><pre>'+data.issue.description+'</pre></dd>');
+              var description =$('<dt>Description</dt><dd><pre>'+textile.parse(data.issue.description)+'</pre></dd>');
 
-              var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append(description));
+              var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
               instance.content(dom);
               // to remember that the data has been loaded
               $origin.data('loaded', true);

@@ -24,7 +24,8 @@
         "js/jquery-3.1.1.js",
         "js/jquery.treetable.js",
         "redmine-issues.js",
-        "js/tooltipster/js/tooltipster.bundle.js"
+        "js/tooltipster/js/tooltipster.bundle.js",
+        "js/textile/textile.js"
       ]
     },
     {
