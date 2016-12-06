@@ -22,7 +22,7 @@ function rebuildTracker(issue,tracker){
 }
 
 function rebuildPriority(priority){
-  var priorityIcon = priority.html().toLowerCase();
+  var priorityIcon = priority.html().toLowerCase().replace("é","e");
   priority.html('<span class="icon icon-'+priorityIcon+'"></span>');
 }
 
