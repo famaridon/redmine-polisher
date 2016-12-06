@@ -11,7 +11,6 @@ span.icon{
 .icon.icon-user-story{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/user-story.png");
   background-image: url("/images/user-story.png");
-  
 }
 
 .icon.icon-task{
