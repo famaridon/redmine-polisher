@@ -1,7 +1,7 @@
 // Saves options to chrome.storage
 function save_options() {
   var redmineAPIKey = document.getElementById('redmineAPIKey').value;
-  chrome.storage.sync.set({
+  setStorage({
     redmineAPIKey: redmineAPIKey
   }, function() {
     // Update status to let user know options were saved.
@@ -15,7 +15,7 @@ function save_options() {
 
 // stored in chrome.storage.
 function restore_options() {
-  chrome.storage.sync.get({
+  getStorage({
     redmineAPIKey: ''
   }, function(items) {
     document.getElementById('redmineAPIKey').value = items.redmineAPIKey;

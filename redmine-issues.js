@@ -104,7 +104,7 @@ $( document ).ready(function() {
 
       var $origin = $(helper.origin);
 
-      chrome.storage.sync.get({
+      getStorage({
         redmineAPIKey: null
       }, function(items) {
         if(items.redmineAPIKey != null && $origin.data('loaded') !== true)
