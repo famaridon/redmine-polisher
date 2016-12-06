@@ -112,7 +112,7 @@ $( document ).ready(function() {
       chrome.storage.sync.get({
         redmineAPIKey: null
       }, function(items) {
-        if(items.redmineAPIKey != null && items.redmineAPIKey !== "" && $origin.data('loaded') !== true)
+        if(items.redmineAPIKey != null && items.redmineAPIKey !== "")
         {
 
           var issueId = $origin.parent().data('tt-id');
@@ -130,8 +130,6 @@ $( document ).ready(function() {
 
               var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
               instance.content(dom);
-              // to remember that the data has been loaded
-              $origin.data('loaded', true);
             }
           });
         }
