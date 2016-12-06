@@ -22,7 +22,7 @@ function rebuildTracker(issue,tracker){
 }
 
 function rebuildPriority(priority){
-  var priorityIcon = priority.html().toLowerCase();
+  var priorityIcon = priority.html().toLowerCase().replace("é","e");
   priority.html('<span class="icon icon-'+priorityIcon+'"></span>');
 }
 
@@ -97,9 +97,14 @@ $( document ).ready(function() {
   $("#query_form_with_buttons p.buttons").append(collapseAllButton);
 
   // start tooltipster
-  $('.subject').tooltipster({
+  $(".subject").tooltipster({
     content: 'Loading...',
     contentAsHTML: true,
+    animation: 'fade',
+    updateAnimation: 'fade',
+    theme: 'tooltipster-light',
+    delay: 500,
+    maxWidth: 800,
     functionBefore: function(instance, helper){
 
       var $origin = $(helper.origin);
@@ -107,7 +112,7 @@ $( document ).ready(function() {
       getStorage({
         redmineAPIKey: null
       }, function(items) {
-        if(items.redmineAPIKey != null && $origin.data('loaded') !== true)
+        if(items.redmineAPIKey != null && items.redmineAPIKey !== "")
         {
 
           var issueId = $origin.parent().data('tt-id');
@@ -120,15 +125,16 @@ $( document ).ready(function() {
             success : function(data){
 
 
-              var title =$('<dt>Title</dt><dd>'+data.issue.subject+'</dd>');
-              var description =$('<dt>Description</dt><dd>'+data.issue.description+'</dd>');
+              var title =$('<h3>'+data.issue.subject+'</h3>');
+              var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
 
-              var dom = $('<dl class="dl-horizontal"></dl>').append(title).append(description);
+              var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
               instance.content(dom);
-              // to remember that the data has been loaded
-              $origin.data('loaded', true);
             }
           });
+        }
+        else{
+          instance.content($("<span class=\"error-message\">Please add your redmine API key</span>"));
         }
       });
     }

@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
 
-  "name": "Visiativ Redmine issues polisher",
-  "description": "This extension polish issuses display",
-  "version": "1.0.4",
-  "version_name": "1.0.4 beta",
+  "name": "Visiativ Redmine polisher",
+  "description": "This extension polish redmine ui",
+  "version": "1.1.1",
+  "version_name": "1.1.1 RC",
   "options_page": "options.html",
   "options_ui": {"page" : "options.html"},
   "browser_action": {
@@ -18,14 +18,16 @@
       "css": [
         "redmine-issues.css",
         "js/tooltipster/css/tooltipster.core.css",
-        "js/tooltipster/css/tooltipster.bundle.css"
+        "js/tooltipster/css/tooltipster.bundle.css",
+        "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css"
       ],
       "js": [
         "js/jquery-3.1.1.js",
         "system.js",
         "js/jquery.treetable.js",
         "redmine-issues.js",
-        "js/tooltipster/js/tooltipster.bundle.js"
+        "js/tooltipster/js/tooltipster.bundle.js",
+        "js/textile/textile.js"
       ]
     },
     {
