@@ -167,16 +167,14 @@ tr.child td.subject .icon{
   margin-left: 10px;
 }
 
-tr.isolated-child td.id{
-  background-color: #ca1e1e !important;
-}
-
 tr.isolated-child .indenter{
   display: none;
 }
 
-tr.isolated-child td.id a {
-  color: white !important;
+tr.isolated-child td:first-child {
+    border-left: 2px solid #ca1e1e !important;
+    border-left-color : #ca1e1e !important;
+    color: white !important;
 }
 
 /* tooltips*/
