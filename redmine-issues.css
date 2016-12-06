@@ -20,20 +20,24 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/bug.png");
 }
 
+.icon.icon-immediat{
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority1.png");
+}
+
 .icon.icon-urgent{
-  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/urgent.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority2.png");
 }
 
 .icon.icon-haut{
-  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/haut.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority3.png");
 }
 
 .icon.icon-normal{
-  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/normal.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority4.png");
 }
 
 .icon.icon-bas{
-  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/bas.png");
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority5.png");
 }
 
 .icon.icon-arrow-up{
@@ -163,43 +167,40 @@ tr.child td.subject .icon{
   margin-left: 10px;
 }
 
-tr.isolated-child td.id{
-  background-color: #ca1e1e !important;
-}
-
 tr.isolated-child .indenter{
   display: none;
 }
 
-tr.isolated-child td.id a {
-  color: white !important;
+tr.isolated-child td:first-child {
+    border-left: 2px solid #ca1e1e !important;
+    border-left-color : #ca1e1e !important;
+    color: white !important;
 }
 
 /* tooltips*/
 
-.tooltip h3{
-  color: #fff;
-}
-
-dl dt{
-  font-weight: bold;
-}
-
 .tooltip-content h3{
+  color: #fff;
+  font-size: 18px;
+}
+
+.tooltip-content dl dd {
+  margin-left: 15px;
+}
+
+.tooltip-content dl dt {
+  font-weight: bold;
   color: #2996CC;
 }
 
-.dl-horizontal dt {
-    float: left;
-    width: 160px;
-    overflow: hidden;
-    clear: left;
-    text-align: right;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #2996CC;
+.tooltip-content dl dt:after {
+  content: ' :';
 }
 
-.dl-horizontal dd {
-    margin-left: 180px;
+.tooltip-content h3 {
+  color: #2996CC;
+}
+
+.tooltip-content .description p {
+  padding-bottom: 0;
 }
