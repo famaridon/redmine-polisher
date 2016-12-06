@@ -180,3 +180,26 @@ tr.isolated-child td.id a {
 .tooltip h3{
   color: #fff;
 }
+
+dl dt{
+  font-weight: bold;
+}
+
+.tooltip-content h3{
+  color: #2996CC;
+}
+
+.dl-horizontal dt {
+    float: left;
+    width: 160px;
+    overflow: hidden;
+    clear: left;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #2996CC;
+}
+
+.dl-horizontal dd {
+    margin-left: 180px;
+}

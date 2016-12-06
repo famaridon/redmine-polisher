@@ -100,6 +100,11 @@ $( document ).ready(function() {
   $('.subject').tooltipster({
     content: 'Loading...',
     contentAsHTML: true,
+    animation: 'fade',
+    updateAnimation: 'fade',
+    theme: 'tooltipster-light',
+    delay: 500,
+    maxWidth: 800,
     functionBefore: function(instance, helper){
 
       var $origin = $(helper.origin);
@@ -120,10 +125,10 @@ $( document ).ready(function() {
             success : function(data){
 
 
-              var title =$('<dt>Title</dt><dd>'+data.issue.subject+'</dd>');
-              var description =$('<dt>Description</dt><dd>'+data.issue.description+'</dd>');
+              var title =$('<h3>'+data.issue.subject+'</h3>');
+              var description =$('<dt>Description</dt><dd><pre>'+data.issue.description+'</pre></dd>');
 
-              var dom = $('<dl class="dl-horizontal"></dl>').append(title).append(description);
+              var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append(description));
               instance.content(dom);
               // to remember that the data has been loaded
               $origin.data('loaded', true);
