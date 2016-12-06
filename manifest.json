@@ -22,6 +22,7 @@
       ],
       "js": [
         "js/jquery-3.1.1.js",
+        "system.js",
         "js/jquery.treetable.js",
         "redmine-issues.js",
         "js/tooltipster/js/tooltipster.bundle.js"
