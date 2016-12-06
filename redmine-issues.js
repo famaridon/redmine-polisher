@@ -100,6 +100,10 @@ $( document ).ready(function() {
   $('.subject').tooltipster({
     content: 'Loading...',
     contentAsHTML: true,
+    animation: 'fade',
+    updateAnimation: 'fade',
+    delay: 500,
+    maxWidth: 600,
     functionBefore: function(instance, helper){
 
       var $origin = $(helper.origin);
