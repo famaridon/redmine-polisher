@@ -126,7 +126,7 @@ $( document ).ready(function() {
 
 
               var title =$('<h3>'+data.issue.subject+'</h3>');
-              var description =$('<dt>Description</dt><dd><pre>'+textile.parse(data.issue.description)+'</pre></dd>');
+              var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
 
               var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
               instance.content(dom);
