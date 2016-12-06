@@ -97,7 +97,7 @@ $( document ).ready(function() {
   $("#query_form_with_buttons p.buttons").append(collapseAllButton);
 
   // start tooltipster
-  $('.subject').tooltipster({
+  $(".subject").tooltipster({
     content: 'Loading...',
     contentAsHTML: true,
     animation: 'fade',
@@ -112,7 +112,7 @@ $( document ).ready(function() {
       chrome.storage.sync.get({
         redmineAPIKey: null
       }, function(items) {
-        if(items.redmineAPIKey != null && $origin.data('loaded') !== true)
+        if(items.redmineAPIKey != null && items.redmineAPIKey !== "" && $origin.data('loaded') !== true)
         {
 
           var issueId = $origin.parent().data('tt-id');
@@ -134,6 +134,9 @@ $( document ).ready(function() {
               $origin.data('loaded', true);
             }
           });
+        }
+        else{
+          instance.content($("<span class=\"error-message\">Please add your redmine API key</span>"));
         }
       });
     }
