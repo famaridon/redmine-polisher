@@ -1,6 +1,6 @@
 function getStorage(value, callback) {
 	if (chrome.storage.sync) {
-		chrom.storage.sync.get(value, callback);
+		chrome.storage.sync.get(value, callback);
 	}
 	else if (browser.storage.local) {
 		browser.storage.local.get(value, callback);
