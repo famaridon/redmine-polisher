@@ -2,7 +2,7 @@ var issuesTable = $(".list.issues");
 
 function rebuildIssue(issue){
   // set the issue id in data- for treetable
-  issue.attr('data-tt-id', issue.attr('id').split('-')[1])
+  issue.attr('data-tt-id', issue.attr('id').split('-')[1]);
 
   rebuildTracker(issue,issue.find("td.tracker"));
 
@@ -40,7 +40,6 @@ function buildParentLink(issue, parent){
   {
     var parentId = /[^/]*$/.exec(parent.attr('href'))[0];
     issue.attr('data-tt-parent-id',parentId);
-    $('#issue-'+parentId).after(issue);
   }
 }
 
@@ -105,6 +104,18 @@ $( document ).ready(function() {
   }
 
   // start tree table
+
+  // reorder table for treetable
+  $("tr.issue").each(function(index, issue){
+    var id = $(issue).attr('data-tt-id');
+    var lastChild = $(issue);
+    $('.issue[data-tt-parent-id="'+id+'"]').each(function(index, child){
+      var $child = $(child);
+      lastChild.after($child);
+      lastChild = $child;
+    })
+  });
+
   var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();
   subjectColumn = subjectColumn === -1 ? 1 : subjectColumn;
   var issuesTreetable = issuesTable.treetable({
@@ -138,7 +149,7 @@ $( document ).ready(function() {
         if(items.redmineAPIKey != null && items.redmineAPIKey !== "")
         {
 
-          var issueId = $origin.parent().data('tt-id');
+          var issueId = $origin.parent().attr('data-tt-id');
           $.ajax({
             method: "GET",
             url: "https://projects.visiativ.com/issues/"+issueId+".json",
