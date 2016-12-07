@@ -56,7 +56,11 @@ $( document ).ready(function() {
 
   // rebuild all DOM
   $('.list.issues th[title=\'Trier par "Tracker"\']').remove();
+  $('.list.issues th[title=\'Sort by "Tracker"\']').remove();
+
+  $('.list.issues th[title=\'Sort by "Parent task"\']').remove();
   $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();
+
 
   $("tr.issue").each(function(index, value){
     var issue = $(value);
