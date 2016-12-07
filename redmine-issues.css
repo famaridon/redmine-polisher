@@ -20,6 +20,14 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/bug.png");
 }
 
+.icon.icon-requirement{
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/requirement.png");
+}
+
+.icon.icon-improvement{
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/improvement.png");
+}
+
 .icon.icon-immediat{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority1.png");
 }
@@ -57,6 +65,8 @@ span.icon{
 
 .indenter{
   padding: 0 5px 0 0;
+  min-width: 21px;
+  display: inline-block;
 }
 .data-tt-expender{
   transition: all 0.25s ease;
@@ -163,12 +173,12 @@ td.subject .icon{
   margin-right: 5px;
 }
 
-tr.child td.subject .icon{
-  margin-left: 10px;
+tr.isolated-child .indenter{
+  margin-left: 0;
 }
 
-tr.isolated-child .indenter{
-  display: none;
+tr.isolated-child td.subject .icon{
+    margin-left: 5px;
 }
 
 tr.isolated-child td:first-child {

@@ -22,8 +22,9 @@ function rebuildTracker(issue,tracker){
 }
 
 function rebuildPriority(priority){
-  var priorityIcon = priority.html().toLowerCase().replace("é","e");
-  priority.html('<span class="icon icon-'+priorityIcon+'"></span>');
+  var originalPriority = priority.html();
+  var priorityIcon = originalPriority.toLowerCase().replace("é","e");
+  priority.html('<span title="' + originalPriority + '" class="icon icon-'+priorityIcon+'"></span>');
 }
 
 function rebuildFixedVersion(version){
@@ -73,7 +74,7 @@ $( document ).ready(function() {
     // set the subject width after all to get the max size.
     var subject = $(issue).find("td.subject");
     var initialWidth = subject.width();
-    $(subject).find("a").width(initialWidth - 65).css({
+    $(subject).find("a").width(initialWidth - 75).css({
       'display':'inline-block',
       'white-space':'nowrap',
       'overflow':'hidden',
@@ -83,6 +84,16 @@ $( document ).ready(function() {
       $(issue).addClass("isolated-child");
     };
   });
+
+  var total = 0;
+  $("td.cf_28").each(function(index,item){
+    var val = parseFloat($(item).html());
+    if(!isNaN(parseFloat(val)) && isFinite(val)){
+      total += val;
+    }
+  });
+  $('.list.issues th[title=\'Sort by par "Charges (Pts)"\'] a').html(total + " pts");
+  $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
 
   // start tree table
 
@@ -138,9 +149,27 @@ $( document ).ready(function() {
               'X-Redmine-API-Key': items.redmineAPIKey
             },
             success : function(data){
-
-
-              var title =$('<h3>'+data.issue.subject+'</h3>');
+              var trackerName;
+              switch(data.issue.tracker.name){
+                case "R&D INNOVATION - Task":
+                  trackerName = "Task - ";
+                  break;
+                case "R&D INNOVATION - User story":
+                  trackerName = "User story - ";
+                  break;
+                case "R&D INNOVATION - Defect":
+                  trackerName = "Defect - ";
+                  break;
+                case "R&D INNOVATION - Requirement":
+                  trackerName = "Requirement - ";
+                  break;
+                case "R&D INNOVATION - Improvement":
+                  trackerName = "Improvement - ";
+                  break;
+                default :
+                trackerName = "";
+              }
+              var title =$('<h3>' + trackerName + data.issue.subject + '</h3>');
               var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
 
               var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
