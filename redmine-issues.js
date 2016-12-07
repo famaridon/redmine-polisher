@@ -75,7 +75,7 @@ $( document ).ready(function() {
     // set the subject width after all to get the max size.
     var subject = $(issue).find("td.subject");
     var initialWidth = subject.width();
-    $(subject).find("a").width(initialWidth - 65).css({
+    $(subject).find("a").width(initialWidth - 75).css({
       'display':'inline-block',
       'white-space':'nowrap',
       'overflow':'hidden',
@@ -85,6 +85,16 @@ $( document ).ready(function() {
       $(issue).addClass("isolated-child");
     }
   });
+
+  var total = 0;
+  $("td.cf_28").each(function(index,item){
+    var val = parseFloat($(item).html());
+    if(!isNaN(parseFloat(val)) && isFinite(val)){
+      total += val;
+    }
+  });
+  $('.list.issues th[title=\'Sort by par "Charges (Pts)"\'] a').html(total + " pts");
+  $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
 
   // start tree table
   var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();
