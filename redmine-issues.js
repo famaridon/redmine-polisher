@@ -74,7 +74,7 @@ $( document ).ready(function() {
     // set the subject width after all to get the max size.
     var subject = $(issue).find("td.subject");
     var initialWidth = subject.width();
-    $(subject).find("a").width(initialWidth - 75).css({
+    $(subject).find("a").css("max-width", initialWidth - 75).css({
       'display':'inline-block',
       'white-space':'nowrap',
       'overflow':'hidden',
@@ -99,7 +99,7 @@ $( document ).ready(function() {
         total += val;
       }
     });
-    $('.list.issues th[title=\'Sort by par "Charges (Pts)"\'] a').html(total + " pts");
+    $('.list.issues th[title=\'Sort by "Charges (Pts)"\'] a').html(total + " pts");
     $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
   }
 
@@ -121,7 +121,6 @@ $( document ).ready(function() {
   var issuesTreetable = issuesTable.treetable({
     'column': subjectColumn,
     'expandable': true,
-    'initialState' : 'expanded',
     'expanderTemplate':'<span class="data-tt-expender  icon icon-arrow-right"></span>'
   });
 
@@ -131,7 +130,7 @@ $( document ).ready(function() {
   $("#query_form_with_buttons p.buttons").append(collapseAllButton);
 
   // start tooltipster
-  $(".subject").tooltipster({
+  $(".subject a").tooltipster({
     content: 'Loading...',
     contentAsHTML: true,
     animation: 'fade',
@@ -149,7 +148,7 @@ $( document ).ready(function() {
         if(items.redmineAPIKey != null && items.redmineAPIKey !== "")
         {
 
-          var issueId = $origin.parent().attr('data-tt-id');
+          var issueId = $origin.closest("tr.issue").attr('data-tt-id');
           $.ajax({
             method: "GET",
             url: "https://projects.visiativ.com/issues/"+issueId+".json",
