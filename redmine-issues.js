@@ -82,19 +82,27 @@ $( document ).ready(function() {
       'text-overflow':'ellipsis'
     });
     if($(issue).hasClass("child") && !$("#issue-" + $(issue).attr("data-tt-parent-id")).length){
-      $(issue).addClass("isolated-child");
+      if($(issue).find("td.subject .icon").hasClass("icon-user-story")){
+        $(issue).addClass("isolated-parent");
+      }
+      else{
+        $(issue).addClass("isolated-child");
+      }
     }
   });
 
+  //count all the "charges"
   var total = 0;
-  $("td.cf_28").each(function(index,item){
-    var val = parseFloat($(item).html());
-    if(!isNaN(parseFloat(val)) && isFinite(val)){
-      total += val;
-    }
-  });
-  $('.list.issues th[title=\'Sort by par "Charges (Pts)"\'] a').html(total + " pts");
-  $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
+  if($("td.cf_28").length > 0){
+    $("td.cf_28").each(function(index,item){
+      var val = parseFloat($(item).html());
+      if(!isNaN(parseFloat(val)) && isFinite(val)){
+        total += val;
+      }
+    });
+    $('.list.issues th[title=\'Sort by par "Charges (Pts)"\'] a').html(total + " pts");
+    $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
+  }
 
   // start tree table
   var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();

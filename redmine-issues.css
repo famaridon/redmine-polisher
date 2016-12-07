@@ -97,6 +97,10 @@ tr.odd.issue.child, tr.even.issue.child {
   background: #f6f7f8 !important;
 }
 
+tr.odd.issue.isolated-parent, tr.even.issue.isolated-parent{
+  background: #fff !important;
+}
+
 
 /*Reset priority bg color*/
 tr.odd.priority-highest,
