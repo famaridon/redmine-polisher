@@ -22,8 +22,9 @@ function rebuildTracker(issue,tracker){
 }
 
 function rebuildPriority(priority){
-  var priorityIcon = priority.html().toLowerCase().replace("é","e");
-  priority.html('<span class="icon icon-'+priorityIcon+'"></span>');
+  var originalPriority = priority.html();
+  var priorityIcon = originalPriority.toLowerCase().replace("é","e");
+  priority.html('<span title="' + originalPriority + '" class="icon icon-'+priorityIcon+'"></span>');
 }
 
 function rebuildFixedVersion(version){
@@ -127,9 +128,27 @@ $( document ).ready(function() {
               'X-Redmine-API-Key': items.redmineAPIKey
             },
             success : function(data){
-
-
-              var title =$('<h3>'+data.issue.subject+'</h3>');
+              var trackerName;
+              switch(data.issue.tracker.name){
+                case "R&D INNOVATION - Task":
+                  trackerName = "Task - ";
+                  break;
+                case "R&D INNOVATION - User story":
+                  trackerName = "User story - ";
+                  break;
+                case "R&D INNOVATION - Defect":
+                  trackerName = "Defect - ";
+                  break;
+                case "R&D INNOVATION - Requirement":
+                  trackerName = "Requirement - ";
+                  break;
+                case "R&D INNOVATION - Improvement":
+                  trackerName = "Improvement - ";
+                  break;
+                default :
+                trackerName = "";
+              }
+              var title =$('<h3>' + trackerName + data.issue.subject + '</h3>');
               var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
 
               var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));

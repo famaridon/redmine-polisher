@@ -20,6 +20,14 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/bug.png");
 }
 
+.icon.icon-requirement{
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/requirement.png");
+}
+
+.icon.icon-improvement{
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/improvement.png");
+}
+
 .icon.icon-immediat{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority1.png");
 }
