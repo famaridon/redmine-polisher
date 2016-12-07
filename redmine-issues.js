@@ -12,6 +12,14 @@ function rebuildIssue(issue){
 
   buildParentLink(issue, issue.find("td.parent a"));
 
+  issue.find("td.cf_28").editable({
+    type: 'text',
+    title: 'Enter username',
+    success: function(response, newValue) {
+        console.log(issue.data('tt-id')+' new value : '+newValue ); //update backbone model
+    }
+});
+
 }
 
 function rebuildTracker(issue,tracker){
