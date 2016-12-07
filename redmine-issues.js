@@ -130,7 +130,6 @@ $( document ).ready(function() {
   var issuesTreetable = issuesTable.treetable({
     'column': subjectColumn,
     'expandable': true,
-    'initialState' : 'expanded',
     'expanderTemplate':'<span class="data-tt-expender  icon icon-arrow-right"></span>'
   });
 
