@@ -2,7 +2,7 @@ var issuesTable = $(".list.issues");
 
 function rebuildIssue(issue){
   // set the issue id in data- for treetable
-  issue.attr('data-tt-id', issue.attr('id').split('-')[1])
+  issue.attr('data-tt-id', issue.attr('id').split('-')[1]);
 
   rebuildTracker(issue,issue.find("td.tracker"));
 
@@ -22,8 +22,9 @@ function rebuildTracker(issue,tracker){
 }
 
 function rebuildPriority(priority){
-  var priorityIcon = priority.html().toLowerCase().replace("é","e");
-  priority.html('<span class="icon icon-'+priorityIcon+'"></span>');
+  var originalPriority = priority.html();
+  var priorityIcon = originalPriority.toLowerCase().replace("é","e");
+  priority.html('<span title="' + originalPriority + '" class="icon icon-'+priorityIcon+'"></span>');
 }
 
 function rebuildFixedVersion(version){
@@ -39,7 +40,6 @@ function buildParentLink(issue, parent){
   {
     var parentId = /[^/]*$/.exec(parent.attr('href'))[0];
     issue.attr('data-tt-parent-id',parentId);
-    $('#issue-'+parentId).after(issue);
   }
 }
 
@@ -56,7 +56,11 @@ $( document ).ready(function() {
 
   // rebuild all DOM
   $('.list.issues th[title=\'Trier par "Tracker"\']').remove();
+  $('.list.issues th[title=\'Sort by "Tracker"\']').remove();
+
+  $('.list.issues th[title=\'Sort by "Parent task"\']').remove();
   $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();
+
 
   $("tr.issue").each(function(index, value){
     var issue = $(value);
@@ -70,18 +74,48 @@ $( document ).ready(function() {
     // set the subject width after all to get the max size.
     var subject = $(issue).find("td.subject");
     var initialWidth = subject.width();
-    $(subject).find("a").width(initialWidth - 65).css({
+    $(subject).find("a").width(initialWidth - 75).css({
       'display':'inline-block',
       'white-space':'nowrap',
       'overflow':'hidden',
       'text-overflow':'ellipsis'
     });
     if($(issue).hasClass("child") && !$("#issue-" + $(issue).attr("data-tt-parent-id")).length){
-      $(issue).addClass("isolated-child");
+      if($(issue).find("td.subject .icon").hasClass("icon-user-story")){
+        $(issue).addClass("isolated-parent");
+      }
+      else{
+        $(issue).addClass("isolated-child");
+      }
     }
   });
 
+  //count all the "charges"
+  var total = 0;
+  if($("td.cf_28").length > 0){
+    $("td.cf_28").each(function(index,item){
+      var val = parseFloat($(item).html());
+      if(!isNaN(parseFloat(val)) && isFinite(val)){
+        total += val;
+      }
+    });
+    $('.list.issues th[title=\'Sort by par "Charges (Pts)"\'] a').html(total + " pts");
+    $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
+  }
+
   // start tree table
+
+  // reorder table for treetable
+  $("tr.issue").each(function(index, issue){
+    var id = $(issue).attr('data-tt-id');
+    var lastChild = $(issue);
+    $('.issue[data-tt-parent-id="'+id+'"]').each(function(index, child){
+      var $child = $(child);
+      lastChild.after($child);
+      lastChild = $child;
+    })
+  });
+
   var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();
   subjectColumn = subjectColumn === -1 ? 1 : subjectColumn;
   var issuesTreetable = issuesTable.treetable({
@@ -115,7 +149,7 @@ $( document ).ready(function() {
         if(items.redmineAPIKey != null && items.redmineAPIKey !== "")
         {
 
-          var issueId = $origin.parent().data('tt-id');
+          var issueId = $origin.parent().attr('data-tt-id');
           $.ajax({
             method: "GET",
             url: "https://projects.visiativ.com/issues/"+issueId+".json",
@@ -123,9 +157,27 @@ $( document ).ready(function() {
               'X-Redmine-API-Key': items.redmineAPIKey
             },
             success : function(data){
-
-
-              var title =$('<h3>'+data.issue.subject+'</h3>');
+              var trackerName;
+              switch(data.issue.tracker.name){
+                case "R&D INNOVATION - Task":
+                  trackerName = "Task - ";
+                  break;
+                case "R&D INNOVATION - User story":
+                  trackerName = "User story - ";
+                  break;
+                case "R&D INNOVATION - Defect":
+                  trackerName = "Defect - ";
+                  break;
+                case "R&D INNOVATION - Requirement":
+                  trackerName = "Requirement - ";
+                  break;
+                case "R&D INNOVATION - Improvement":
+                  trackerName = "Improvement - ";
+                  break;
+                default :
+                trackerName = "";
+              }
+              var title =$('<h3>' + trackerName + data.issue.subject + '</h3>');
               var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
 
               var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
