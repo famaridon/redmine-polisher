@@ -99,7 +99,7 @@ $( document ).ready(function() {
         total += val;
       }
     });
-    $('.list.issues th[title=\'Sort by par "Charges (Pts)"\'] a').html(total + " pts");
+    $('.list.issues th[title=\'Sort by "Charges (Pts)"\'] a').html(total + " pts");
     $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
   }
 
