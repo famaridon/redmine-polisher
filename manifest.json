@@ -19,7 +19,8 @@
         "js/tooltipster/css/tooltipster.core.css",
         "js/tooltipster/css/tooltipster.bundle.css",
         "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
-        "js/jquery-editable/css/jquery-editable.css"
+        "js/jquery-editable/css/jquery-editable.css",
+        "js/poshytip/tip-default/tip-default.css"
       ],
       "js": [
         "js/jquery-3.1.1.js",

@@ -12,15 +12,79 @@ function rebuildIssue(issue){
 
   buildParentLink(issue, issue.find("td.parent a"));
 
-  issue.find("td.cf_28").editable({
-    type: 'text',
-    emptytext: '-',
-    title: 'Enter username',
-    success: function(response, newValue) {
-        console.log(issue.data('tt-id')+' new value : '+newValue ); //update backbone model
-    }
-});
+  rebuildWorkload(issue);
+  rebuildDoneRatio(issue);
+}
 
+function rebuildDoneRatio(issue){
+  // rebuild with html progressbar
+  var issueId = issue.data('tt-id');
+  var css = issue.find('table').attr('class');
+  var doneRatio = css.substring(css.indexOf("-")+1,css.length);
+
+  issue.find("td.done_ratio").editable({
+    type: 'range',
+    value: doneRatio,
+    title: 'Enter done %',
+    tpl: '<input type="range" min="0" max="100" step="10" /><output></output>',
+    display: function(value, sourceData) {
+      $(this).html('<progress max="100" value="'+value+'"></progress>');
+    },
+    success: function(response, newValue) {
+      var issueId = issue.data('tt-id');
+      callRedmineAPI(function(redmineAPIKey){
+        $.ajax({
+          method: "PUT",
+          url: "https://projects.visiativ.com/issues/"+issueId+".json",
+          headers: {
+            'X-Redmine-API-Key': redmineAPIKey
+          },
+          contentType: "application/json; charset=utf-8",
+          dataType: 'json',
+          data: JSON.stringify({
+            "issue": {
+              "done_ratio": newValue
+            }
+          }),
+          success : function(data){
+            console.log(issueId+' workload updated to '+newValue );
+          }
+        });
+      });
+    }
+  });
+}
+
+function rebuildWorkload(issue){
+  issue.find("td.cf_28").editable({
+    type: 'number',
+    emptytext: '-',
+    title: 'Enter workload in points',
+    success: function(response, newValue) {
+      var issueId = issue.data('tt-id');
+      callRedmineAPI(function(redmineAPIKey){
+        $.ajax({
+          method: "PUT",
+          url: "https://projects.visiativ.com/issues/"+issueId+".json",
+          headers: {
+            'X-Redmine-API-Key': redmineAPIKey
+          },
+          contentType: "application/json; charset=utf-8",
+          dataType: 'json',
+          data: JSON.stringify({
+            "issue": {
+              "custom_fields": [
+                {"id": 28, "value": newValue }
+              ]
+            }
+          }),
+          success : function(data){
+            console.log(issueId+' workload updated to '+newValue );
+          }
+        });
+      });
+    }
+  });
 }
 
 function rebuildTracker(issue,tracker){
@@ -52,6 +116,17 @@ function buildParentLink(issue, parent){
   }
 }
 
+/**
+*
+**/
+function callRedmineAPI(callback){
+  chrome.storage.sync.get({
+    redmineAPIKey: null
+  }, function(items) {
+    callback(items.redmineAPIKey);
+  });
+}
+
 function expandIssues(){
   issuesTable.treetable('expandAll');
 }
@@ -62,6 +137,8 @@ function collapseIssues(){
 
 $( document ).ready(function() {
   console.log( "Redmine tools started" );
+
+  $.fn.editableContainer.defaults.className = "tip-default";
 
   // rebuild all DOM
   $('.list.issues th[title=\'Trier par "Tracker"\']').remove();
@@ -150,11 +227,8 @@ $( document ).ready(function() {
     functionBefore: function(instance, helper){
 
       var $origin = $(helper.origin);
-
-      chrome.storage.sync.get({
-        redmineAPIKey: null
-      }, function(items) {
-        if(items.redmineAPIKey != null && items.redmineAPIKey !== "")
+      callRedmineAPI(function(redmineAPIKey){
+        if(redmineAPIKey != null && redmineAPIKey !== "")
         {
 
           var issueId = $origin.closest("tr.issue").attr('data-tt-id');
@@ -162,26 +236,26 @@ $( document ).ready(function() {
             method: "GET",
             url: "https://projects.visiativ.com/issues/"+issueId+".json",
             headers: {
-              'X-Redmine-API-Key': items.redmineAPIKey
+              'X-Redmine-API-Key': redmineAPIKey
             },
             success : function(data){
               var trackerName;
               switch(data.issue.tracker.name){
                 case "R&D INNOVATION - Task":
-                  trackerName = "Task - ";
-                  break;
+                trackerName = "Task - ";
+                break;
                 case "R&D INNOVATION - User story":
-                  trackerName = "User story - ";
-                  break;
+                trackerName = "User story - ";
+                break;
                 case "R&D INNOVATION - Defect":
-                  trackerName = "Defect - ";
-                  break;
+                trackerName = "Defect - ";
+                break;
                 case "R&D INNOVATION - Requirement":
-                  trackerName = "Requirement - ";
-                  break;
+                trackerName = "Requirement - ";
+                break;
                 case "R&D INNOVATION - Improvement":
-                  trackerName = "Improvement - ";
-                  break;
+                trackerName = "Improvement - ";
+                break;
                 default :
                 trackerName = "";
               }
