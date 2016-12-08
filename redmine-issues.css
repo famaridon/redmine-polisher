@@ -25,10 +25,12 @@ span.icon{
 
 .icon.icon-requirement{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/requirement.png");
+  background-image: url("/images/requirement.png");
 }
 
 .icon.icon-improvement{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/improvement.png");
+  background-image: url("/images/improvement.png");
 }
 
 .icon.icon-immediat{
