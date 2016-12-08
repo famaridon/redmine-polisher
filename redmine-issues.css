@@ -45,7 +45,7 @@ span.icon{
 
 .icon.icon-bas{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority5.png");
-  background-image: url("/images/priority/priotity5.png");
+  background-image: url("/images/priority/priority5.png");
 }
 
 .icon.icon-arrow-up{
