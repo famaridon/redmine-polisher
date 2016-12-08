@@ -153,55 +153,51 @@ function rebuildDoneRatio(issue){
     display: function(value, sourceData) {
       $(this).html('<progress max="100" value="'+value+'"></progress>');
     },
-    success: function(response, newValue) {
+    url: function(params) {
       var issueId = issue.data('tt-id');
-      $.ajax({
+      var deferred = $.ajax({
         method: "PUT",
         url: "https://projects.visiativ.com/issues/"+issueId+".json",
         headers: {
           'X-Redmine-API-Key': redmineAPIKey
         },
         contentType: "application/json; charset=utf-8",
-        dataType: 'json',
+        dataType: 'text',
         data: JSON.stringify({
           "issue": {
-            "done_ratio": newValue
+            "done_ratio": params.value
           }
-        }),
-        success : function(data){
-          console.log(issueId+' workload updated to '+newValue );
-        }
+        })
       });
+      return deferred;
     }
   });
 }
 
 function rebuildWorkload(issue){
   issue.find("td.cf_28").editable({
-    type: 'number',
+    type: 'text',
     emptytext: '-',
     title: 'Enter workload in points',
-    success: function(response, newValue) {
+    url: function(params) {
       var issueId = issue.data('tt-id');
-      $.ajax({
+      var deferred = $.ajax({
         method: "PUT",
         url: "https://projects.visiativ.com/issues/"+issueId+".json",
         headers: {
           'X-Redmine-API-Key': redmineAPIKey
         },
         contentType: "application/json; charset=utf-8",
-        dataType: 'json',
+        dataType: 'text',
         data: JSON.stringify({
           "issue": {
             "custom_fields": [
-              {"id": 28, "value": newValue }
+              {"id": 28, "value": params.value }
             ]
           }
-        }),
-        success : function(data){
-          console.log(issueId+' workload updated to '+newValue );
-        }
+        })
       });
+      return deferred;
     }
   });
 }
