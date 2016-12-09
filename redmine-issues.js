@@ -1,5 +1,6 @@
 var issuesTable = $(".list.issues");
 var redmineAPIKey = null;
+var project = null;
 
 function rebuildIssuesTable(){
 
@@ -9,7 +10,6 @@ function rebuildIssuesTable(){
   $('.list.issues th[title=\'Sort by "Parent task"\']').remove();
   $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();
 
-
   $("tr.issue").each(function(index, value){
     var issue = $(value);
     rebuildIssue(issue);
@@ -18,6 +18,23 @@ function rebuildIssuesTable(){
     issue.find("td.parent").remove();
     issue.find("td.tracker").remove();
   });
+}
+
+function rebuildIssue(issue){
+  // set the issue id in data- for treetable
+  issue.attr('data-tt-id', issue.attr('id').split('-')[1]);
+
+  rebuildTracker(issue,issue.find("td.tracker"));
+
+  rebuildPriority(issue.find("td.priority"));
+
+  rebuildFixedVersion(issue.find("td.fixed_version"));
+
+  buildParentLink(issue, issue.find("td.parent a"));
+
+  rebuildWorkload(issue);
+  rebuildDoneRatio(issue);
+  rebuildAssignedTo(issue);
 
 }
 
@@ -123,24 +140,6 @@ function setupTooltips(){
   });
 }
 
-function rebuildIssue(issue){
-  // set the issue id in data- for treetable
-  issue.attr('data-tt-id', issue.attr('id').split('-')[1]);
-
-  rebuildTracker(issue,issue.find("td.tracker"));
-
-  rebuildPriority(issue.find("td.priority"));
-
-  rebuildFixedVersion(issue.find("td.fixed_version"));
-
-  buildParentLink(issue, issue.find("td.parent a"));
-
-  rebuildWorkload(issue);
-  rebuildDoneRatio(issue);
-  // rebuildAssignedTo(issue);
-
-}
-
 function rebuildDoneRatio(issue){
   // rebuild with html progressbar
   var issueId = issue.data('tt-id');
@@ -215,45 +214,42 @@ function rebuildAssignedTo(issue){
     userid = $($a.attr('href').split('/')).last();
     username = $a.html();
   }
-  $assignedTo.editable({
-    type: 'select',
-    value: {value: userid, text: username},
-    emptytext: '-',
-    title: 'Assigned to',
-    display: function(value, sourceData, response) {
-      $assignedTo.html(value.text);
-    },
-    prepend: function(scope){
-      return $.ajax({
-        method: "GET",
-        url: "https://projects.visiativ.com/projects/moovapps-process-team/memberships.json",
-        headers: {
-          'X-Redmine-API-Key': redmineAPIKey
-        },
-        contentType: "application/json; charset=utf-8",
-        dataType: 'json'
-      });
-    },
-    url: function(params) {
-      var issueId = issue.data('tt-id');
-      var deferred = $.ajax({
-        method: "PUT",
-        url: "https://projects.visiativ.com/issues/"+issueId+".json",
-        headers: {
-          'X-Redmine-API-Key': redmineAPIKey
-        },
-        contentType: "application/json; charset=utf-8",
-        dataType: 'text',
-        data: JSON.stringify({
-          "issue": {
-            "custom_fields": [
-              {"id": 28, "value": params.value }
-            ]
+  project.getMembers().done(function(members){
+    $assignedTo.editable({
+      type: 'select',
+      value: userid,
+      emptytext: '-',
+      title: 'Assigned to',
+      display: function(value, sourceData, response) {
+        $(members).each(function(index, member){
+          if(member.value == value)
+          {
+            $assignedTo.html(member.text);
+            return false;
           }
-        })
-      });
-      return deferred;
-    }
+        });
+
+      },
+      source: members,
+      url: function(params) {
+        var issueId = issue.data('tt-id');
+        var deferred = $.ajax({
+          method: "PUT",
+          url: "https://projects.visiativ.com/issues/"+issueId+".json",
+          headers: {
+            'X-Redmine-API-Key': redmineAPIKey
+          },
+          contentType: "application/json; charset=utf-8",
+          dataType: 'text',
+          data: JSON.stringify({
+            "issue": {
+              "assigned_to_id":  params.value
+            }
+          })
+        });
+        return deferred;
+      }
+    });
   });
 }
 
@@ -302,6 +298,14 @@ $( document ).ready(function() {
     console.info( "Configuration loaded : " );
     console.debug( configuration );
     redmineAPIKey = configuration.redmineAPIKey;
+    // get the base url
+    if (!location.origin) {
+      location.origin = location.protocol + "//" + location.host;
+    }
+    // get the project system name
+    var projectName = window.location.href.split('/')[4];
+
+    project = new Project(redmineAPIKey,location.origin, projectName);
 
     // setup all default plugin configuration
     $.fn.editableContainer.defaults.className = "tip-default";
@@ -316,7 +320,40 @@ $( document ).ready(function() {
 
     console.info( "Setup tooltips" );
     setupTooltips();
-
   });
-
 });
+
+
+class Project {
+
+  constructor(apiKey, url, project) {
+    this.apiKey = apiKey;
+    this.url = url;
+    this.projectName = project;
+    this.members = null;
+  }
+
+  getMembers(){
+    if(this.members == null) {
+      var self = this;
+      this.members = $.Deferred();
+      $.ajax({
+        method: "GET",
+        url: this.url+"/projects/"+this.projectName+"/memberships.json",
+        headers: {
+          'X-Redmine-API-Key': this.apiKey
+        },
+        dataType: 'json'
+      })
+      .done(function(data){
+        var membersArray = [];
+        $(data.memberships).each(function(index, membership){
+          membersArray.push({value:membership.user.id, text:membership.user.name});
+        });
+        self.members.resolve(membersArray);
+      });
+    }
+    return this.members;
+  }
+
+}
