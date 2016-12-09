@@ -1,4 +1,127 @@
 var issuesTable = $(".list.issues");
+var redmineAPIKey = null;
+
+function rebuildIssuesTable(){
+
+  // remove headers (some td are only used for data)
+  $('.list.issues th[title=\'Trier par "Tracker"\']').remove();
+  $('.list.issues th[title=\'Sort by "Tracker"\']').remove();
+  $('.list.issues th[title=\'Sort by "Parent task"\']').remove();
+  $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();
+
+
+  $("tr.issue").each(function(index, value){
+    var issue = $(value);
+    rebuildIssue(issue);
+
+    // remove td are only used for data
+    issue.find("td.parent").remove();
+    issue.find("td.tracker").remove();
+  });
+
+}
+
+function rebuildSubjects(){
+  // set the subject width after all to get the max size.
+  $("tr.issue").each(function(index, issue){
+    var subject = $(issue).find("td.subject");
+    var initialWidth = subject.width();
+    $(subject).find("a").css("max-width", initialWidth - 75).css({
+      'display':'inline-block',
+      'white-space':'nowrap',
+      'overflow':'hidden',
+      'text-overflow':'ellipsis'
+    });
+    if($(issue).hasClass("child") && !$("#issue-" + $(issue).attr("data-tt-parent-id")).length){
+      if($(issue).find("td.subject .icon").hasClass("icon-user-story")){
+        $(issue).addClass("isolated-parent");
+      }
+      else{
+        $(issue).addClass("isolated-child");
+      }
+    }
+  });
+}
+
+function countWorkload(){
+  //count all the "charges"
+  var total = 0;
+  if($("td.cf_28").length > 0){
+    $("td.cf_28").each(function(index,item){
+      var val = parseFloat($(item).html());
+      if(!isNaN(parseFloat(val)) && isFinite(val)){
+        total += val;
+      }
+    });
+    $('.list.issues th[title=\'Sort by "Charges (Pts)"\'] a').html(total + " pts");
+    $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
+  }
+}
+
+function setupTreeTable(){
+  // start tree table
+  // reorder table for treetable
+  $("tr.issue").each(function(index, issue){
+    var id = $(issue).attr('data-tt-id');
+    var lastChild = $(issue);
+    $('.issue[data-tt-parent-id="'+id+'"]').each(function(index, child){
+      var $child = $(child);
+      lastChild.after($child);
+      lastChild = $child;
+    })
+  });
+
+  var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();
+  subjectColumn = subjectColumn === -1 ? 1 : subjectColumn;
+  var issuesTreetable = issuesTable.treetable({
+    'column': subjectColumn,
+    'expandable': true,
+    'expanderTemplate':'<span class="data-tt-expender  icon icon-arrow-right"></span>'
+  });
+
+  var expandAllButton = $("<a class=\"icon icon-arrow-down expand-all-button\">Expand all</a>").css("cursor","pointer").on('click',expandIssues);
+  $("#query_form_with_buttons p.buttons").append(expandAllButton);
+  var collapseAllButton = $("<a class=\"icon icon-arrow-up collapse-all-button\">Collapse all</a>").css("cursor","pointer").on('click',collapseIssues);
+  $("#query_form_with_buttons p.buttons").append(collapseAllButton);
+}
+
+function setupTooltips(){
+  // start tooltipster
+  $(".subject a").tooltipster({
+    content: 'Loading...',
+    contentAsHTML: true,
+    animation: 'fade',
+    updateAnimation: 'fade',
+    theme: 'tooltipster-light',
+    delay: 500,
+    maxWidth: 800,
+    functionBefore: function(instance, helper){
+
+      var $origin = $(helper.origin);
+      var issueId = $origin.closest("tr.issue").attr('data-tt-id');
+      $.ajax({
+        method: "GET",
+        url: "https://projects.visiativ.com/issues/"+issueId+".json",
+        headers: {
+          'X-Redmine-API-Key': redmineAPIKey
+        },
+        success : function(data){
+          var trackerName = "";
+          if(data.issue.tracker.name.startsWith("R&D INNOVATION - "))
+          {
+            trackerName = data.issue.tracker.name.substring("R&D INNOVATION - ".length+1,data.issue.tracker.name.length);
+          }
+          var title =$('<h3>' + trackerName + data.issue.subject + '</h3>');
+          var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
+
+          var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
+          instance.content(dom);
+        }
+      });
+
+    }
+  });
+}
 
 function rebuildIssue(issue){
   // set the issue id in data- for treetable
@@ -12,6 +135,126 @@ function rebuildIssue(issue){
 
   buildParentLink(issue, issue.find("td.parent a"));
 
+  rebuildWorkload(issue);
+  rebuildDoneRatio(issue);
+  // rebuildAssignedTo(issue);
+
+}
+
+function rebuildDoneRatio(issue){
+  // rebuild with html progressbar
+  var issueId = issue.data('tt-id');
+  var css = issue.find('td.done_ratio table').attr('class');
+  var doneRatio = css.substring(css.indexOf("-")+1,css.length);
+
+  issue.find("td.done_ratio").editable({
+    type: 'range',
+    value: doneRatio,
+    title: 'Enter done %',
+    tpl: '<input type="range" min="0" max="100" step="10" /><output></output>',
+    display: function(value, sourceData) {
+      $(this).html('<progress max="100" value="'+value+'"></progress>');
+    },
+    url: function(params) {
+      var issueId = issue.data('tt-id');
+      var deferred = $.ajax({
+        method: "PUT",
+        url: "https://projects.visiativ.com/issues/"+issueId+".json",
+        headers: {
+          'X-Redmine-API-Key': redmineAPIKey
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: 'text',
+        data: JSON.stringify({
+          "issue": {
+            "done_ratio": params.value
+          }
+        })
+      });
+      return deferred;
+    }
+  });
+}
+
+function rebuildWorkload(issue){
+  issue.find("td.cf_28").editable({
+    type: 'text',
+    emptytext: '-',
+    title: 'Enter workload in points',
+    url: function(params) {
+      var issueId = issue.data('tt-id');
+      var deferred = $.ajax({
+        method: "PUT",
+        url: "https://projects.visiativ.com/issues/"+issueId+".json",
+        headers: {
+          'X-Redmine-API-Key': redmineAPIKey
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: 'text',
+        data: JSON.stringify({
+          "issue": {
+            "custom_fields": [
+              {"id": 28, "value": params.value }
+            ]
+          }
+        })
+      });
+      return deferred;
+    }
+  });
+}
+
+function rebuildAssignedTo(issue){
+  var $assignedTo = issue.find("td.assigned_to");
+  var $a = $assignedTo.find('a');
+
+  var userid = null;
+  var username = null;
+  if(typeof ($a.attr('href')) != 'undefined')
+  {
+    userid = $($a.attr('href').split('/')).last();
+    username = $a.html();
+  }
+  $assignedTo.editable({
+    type: 'select',
+    value: {value: userid, text: username},
+    emptytext: '-',
+    title: 'Assigned to',
+    display: function(value, sourceData, response) {
+      $assignedTo.html(value.text);
+    },
+    prepend: function(scope){
+      return $.ajax({
+        method: "GET",
+        url: "https://projects.visiativ.com/projects/moovapps-process-team/memberships.json",
+        headers: {
+          'X-Redmine-API-Key': redmineAPIKey
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json'
+      });
+    },
+    url: function(params) {
+      var issueId = issue.data('tt-id');
+      var deferred = $.ajax({
+        method: "PUT",
+        url: "https://projects.visiativ.com/issues/"+issueId+".json",
+        headers: {
+          'X-Redmine-API-Key': redmineAPIKey
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: 'text',
+        data: JSON.stringify({
+          "issue": {
+            "custom_fields": [
+              {"id": 28, "value": params.value }
+            ]
+          }
+        })
+      });
+      return deferred;
+    }
+  });
 }
 
 function rebuildTracker(issue,tracker){
@@ -52,143 +295,28 @@ function collapseIssues(){
 }
 
 $( document ).ready(function() {
-  console.log( "Redmine tools started" );
+  console.info( "Redmine tools started!" );
+  chrome.storage.sync.get({
+    redmineAPIKey: null
+  }, function(configuration) {
+    console.info( "Configuration loaded : " );
+    console.debug( configuration );
+    redmineAPIKey = configuration.redmineAPIKey;
 
-  // rebuild all DOM
-  $('.list.issues th[title=\'Trier par "Tracker"\']').remove();
-  $('.list.issues th[title=\'Sort by "Tracker"\']').remove();
+    // setup all default plugin configuration
+    $.fn.editableContainer.defaults.className = "tip-default";
 
-  $('.list.issues th[title=\'Sort by "Parent task"\']').remove();
-  $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();
+    console.info( "Start rebuilding the DOM" );
+    rebuildIssuesTable();
+    rebuildSubjects();
+    countWorkload();
 
+    console.info( "Setup the tree table" );
+    setupTreeTable();
 
-  $("tr.issue").each(function(index, value){
-    var issue = $(value);
-    rebuildIssue(issue);
-    issue.find("td.parent").remove();
-    issue.find("td.tracker").remove();
-  });
+    console.info( "Setup tooltips" );
+    setupTooltips();
 
-
-  $("tr.issue").each(function(index, issue){
-    // set the subject width after all to get the max size.
-    var subject = $(issue).find("td.subject");
-    var initialWidth = subject.width();
-    $(subject).find("a").css("max-width", initialWidth - 75).css({
-      'display':'inline-block',
-      'white-space':'nowrap',
-      'overflow':'hidden',
-      'text-overflow':'ellipsis'
-    });
-    if($(issue).hasClass("child") && !$("#issue-" + $(issue).attr("data-tt-parent-id")).length){
-      if($(issue).find("td.subject .icon").hasClass("icon-user-story")){
-        $(issue).addClass("isolated-parent");
-      }
-      else{
-        $(issue).addClass("isolated-child");
-      }
-    }
-  });
-
-  //count all the "charges"
-  var total = 0;
-  if($("td.cf_28").length > 0){
-    $("td.cf_28").each(function(index,item){
-      var val = parseFloat($(item).html());
-      if(!isNaN(parseFloat(val)) && isFinite(val)){
-        total += val;
-      }
-    });
-    $('.list.issues th[title=\'Sort by "Charges (Pts)"\'] a').html(total + " pts");
-    $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
-  }
-
-  // start tree table
-
-  // reorder table for treetable
-  $("tr.issue").each(function(index, issue){
-    var id = $(issue).attr('data-tt-id');
-    var lastChild = $(issue);
-    $('.issue[data-tt-parent-id="'+id+'"]').each(function(index, child){
-      var $child = $(child);
-      lastChild.after($child);
-      lastChild = $child;
-    })
-  });
-
-  var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();
-  subjectColumn = subjectColumn === -1 ? 1 : subjectColumn;
-  var issuesTreetable = issuesTable.treetable({
-    'column': subjectColumn,
-    'expandable': true,
-    'expanderTemplate':'<span class="data-tt-expender  icon icon-arrow-right"></span>'
-  });
-
-  var expandAllButton = $("<a class=\"icon icon-arrow-down expand-all-button\">Expand all</a>").css("cursor","pointer").on('click',expandIssues);
-  $("#query_form_with_buttons p.buttons").append(expandAllButton);
-  var collapseAllButton = $("<a class=\"icon icon-arrow-up collapse-all-button\">Collapse all</a>").css("cursor","pointer").on('click',collapseIssues);
-  $("#query_form_with_buttons p.buttons").append(collapseAllButton);
-
-  // start tooltipster
-  $(".subject a").tooltipster({
-    content: 'Loading...',
-    contentAsHTML: true,
-    animation: 'fade',
-    updateAnimation: 'fade',
-    theme: 'tooltipster-light',
-    delay: 500,
-    maxWidth: 800,
-    functionBefore: function(instance, helper){
-
-      var $origin = $(helper.origin);
-
-      chrome.storage.sync.get({
-        redmineAPIKey: null
-      }, function(items) {
-        if(items.redmineAPIKey != null && items.redmineAPIKey !== "")
-        {
-
-          var issueId = $origin.closest("tr.issue").attr('data-tt-id');
-          $.ajax({
-            method: "GET",
-            url: "https://projects.visiativ.com/issues/"+issueId+".json",
-            headers: {
-              'X-Redmine-API-Key': items.redmineAPIKey
-            },
-            success : function(data){
-              var trackerName;
-              switch(data.issue.tracker.name){
-                case "R&D INNOVATION - Task":
-                  trackerName = "Task - ";
-                  break;
-                case "R&D INNOVATION - User story":
-                  trackerName = "User story - ";
-                  break;
-                case "R&D INNOVATION - Defect":
-                  trackerName = "Defect - ";
-                  break;
-                case "R&D INNOVATION - Requirement":
-                  trackerName = "Requirement - ";
-                  break;
-                case "R&D INNOVATION - Improvement":
-                  trackerName = "Improvement - ";
-                  break;
-                default :
-                trackerName = "";
-              }
-              var title =$('<h3>' + trackerName + data.issue.subject + '</h3>');
-              var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
-
-              var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
-              instance.content(dom);
-            }
-          });
-        }
-        else{
-          instance.content($("<span class=\"error-message\">Please add your redmine API key</span>"));
-        }
-      });
-    }
   });
 
 });
