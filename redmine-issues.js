@@ -137,12 +137,14 @@ function rebuildIssue(issue){
 
   rebuildWorkload(issue);
   rebuildDoneRatio(issue);
+  // rebuildAssignedTo(issue);
+
 }
 
 function rebuildDoneRatio(issue){
   // rebuild with html progressbar
   var issueId = issue.data('tt-id');
-  var css = issue.find('table').attr('class');
+  var css = issue.find('td.done_ratio table').attr('class');
   var doneRatio = css.substring(css.indexOf("-")+1,css.length);
 
   issue.find("td.done_ratio").editable({
@@ -179,6 +181,59 @@ function rebuildWorkload(issue){
     type: 'text',
     emptytext: '-',
     title: 'Enter workload in points',
+    url: function(params) {
+      var issueId = issue.data('tt-id');
+      var deferred = $.ajax({
+        method: "PUT",
+        url: "https://projects.visiativ.com/issues/"+issueId+".json",
+        headers: {
+          'X-Redmine-API-Key': redmineAPIKey
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: 'text',
+        data: JSON.stringify({
+          "issue": {
+            "custom_fields": [
+              {"id": 28, "value": params.value }
+            ]
+          }
+        })
+      });
+      return deferred;
+    }
+  });
+}
+
+function rebuildAssignedTo(issue){
+  var $assignedTo = issue.find("td.assigned_to");
+  var $a = $assignedTo.find('a');
+
+  var userid = null;
+  var username = null;
+  if(typeof ($a.attr('href')) != 'undefined')
+  {
+    userid = $($a.attr('href').split('/')).last();
+    username = $a.html();
+  }
+  $assignedTo.editable({
+    type: 'select',
+    value: {value: userid, text: username},
+    emptytext: '-',
+    title: 'Assigned to',
+    display: function(value, sourceData, response) {
+      $assignedTo.html(value.text);
+    },
+    prepend: function(scope){
+      return $.ajax({
+        method: "GET",
+        url: "https://projects.visiativ.com/projects/moovapps-process-team/memberships.json",
+        headers: {
+          'X-Redmine-API-Key': redmineAPIKey
+        },
+        contentType: "application/json; charset=utf-8",
+        dataType: 'json'
+      });
+    },
     url: function(params) {
       var issueId = issue.data('tt-id');
       var deferred = $.ajax({
