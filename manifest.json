@@ -3,7 +3,8 @@
 
   "name": "Visiativ Redmine polisher",
   "description": "This extension polish redmine ui",
-  "version": "1.2.0",
+  "version": "1.2.1",
+  "version_name": "1.2.1",
   "options_page": "options.html",
   "browser_action": {
     "default_icon": "icon.png"
@@ -43,6 +44,18 @@
         "js/jquery-3.1.1.js",
         "js/jstree/jstree.js",
         "redmine-projects.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://projects.visiativ.com/issues/*"
+      ],
+      "css": [
+        "redmine-issue.css"
+      ],
+      "js": [
+        "js/jquery-3.1.1.js",
+        "redmine-issue.js"
       ]
     }
   ],
