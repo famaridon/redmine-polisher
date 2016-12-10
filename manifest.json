@@ -45,6 +45,18 @@
         "js/jstree/jstree.js",
         "redmine-projects.js"
       ]
+    },
+    {
+      "matches": [
+        "https://projects.visiativ.com/issues/*"
+      ],
+      "css": [
+        "redmine-issue.css"
+      ],
+      "js": [
+        "js/jquery-3.1.1.js",
+        "redmine-issue.js"
+      ]
     }
   ],
   "permissions": [
