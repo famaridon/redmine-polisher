@@ -126,9 +126,9 @@ function setupTooltips(){
           var trackerName = "";
           if(data.issue.tracker.name.startsWith("R&D INNOVATION - "))
           {
-            trackerName = data.issue.tracker.name.substring("R&D INNOVATION - ".length+1,data.issue.tracker.name.length);
+            trackerName = data.issue.tracker.name.substring("R&D INNOVATION - ".length,data.issue.tracker.name.length);
           }
-          var title =$('<h3>' + trackerName + data.issue.subject + '</h3>');
+          var title =$('<h3>' + trackerName + ' - ' + data.issue.subject + '</h3>');
           var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
 
           var dom = $('<div></div>').addClass('tooltip-content').append(title).append($('<dl class="dl-horizontal"></dl>').append( description ));
