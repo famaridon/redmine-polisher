@@ -11,6 +11,11 @@ $( document ).ready(function() {
   var ticketLink = $('div.cf_3 > div.value').html();
   $('div.cf_3 > div.value').html('<a href="' + ticketLink + '">' + ticketId + '</a>');
   $('div.cf_1').hide();
+  $(".list.issues tr.issue").each(function(index,item){
+    var link = $(item).find("td.subject a");
+    link.append(link[0].nextSibling.nodeValue);
+     $(item).find("td.subject").html(link);
+  });
 
 });
 
