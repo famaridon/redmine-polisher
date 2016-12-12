@@ -143,7 +143,11 @@ function setupTooltips(){
 function rebuildDoneRatio(issue){
   // rebuild with html progressbar
   var issueId = issue.data('tt-id');
-  var css = issue.find('td.done_ratio table').attr('class');
+  var $doneRatio = issue.find('td.done_ratio table');
+  if($doneRatio.length == 0){
+    return;
+  }
+  var css = $doneRatio.attr('class');
   var doneRatio = css.substring(css.indexOf("-")+1,css.length);
 
   issue.find("td.done_ratio").editable({
@@ -331,6 +335,7 @@ class Project {
     this.url = url;
     this.projectName = project;
     this.members = null;
+    this.issueStatuses = null;
   }
 
   getMembers(){
