@@ -24,19 +24,21 @@ class Subject{
     this.$subject = $subject;
     this.title = this.$subject.find("div h3").text();
 
-    var $parent = this.$subject.find("div p");
-    if($parent.length > 0){
-      this.parent =  new SubjectParent($parent);
+    var $parents = this.$subject.find("div p");
+    if($parents.length > 0){
+      this.parents =  new SubjectParent($parents);
     } else {
-      this.parent = null;
+      this.parents = null;
     }
   }
 
   toBreadcrumbs(){
     var breadcrumbs = $('<ol class="breadcrumb"></ol>');
-    if(this.parent != null){
-      breadcrumbs.append('<li><a title="'+this.parent.parentId+'" href="'+this.parent.parentUrl+'">'+this.parent.parentTitle+'</a></li>');
-    }
+    if(this.parents != null){
+        $.each( this.parents.$parents, function( index, parent ){
+          breadcrumbs.append('<li><a title="'+parent.parentId+'" href="'+parent.parentUrl+'">'+parent.parentTitle+'</a></li>');
+        });
+      }
     breadcrumbs.append('<li>'+this.title+'</li>');
     return breadcrumbs;
   }
@@ -44,13 +46,16 @@ class Subject{
 }
 
 class SubjectParent{
-  constructor($parent) {
-    this.$parent = $parent;
-    var $parentA =   this.$parent.find("a.issue");
-    this.parentUrl = $parentA.attr("href");
-    this.parentId = $parentA.html().substring($parentA.html().indexOf("#")+1, $parentA.html().length);
-    this.parentTitle = $parentA[0].nextSibling.nodeValue;
-    this.parentTitle = this.parentTitle.substring(2, this.parentTitle.length);
+  constructor($parents) {
+    this.$parents = $parents;
+    var self = this;
+    $.each( this.$parents, function( index, $parent ){
+      var $parentA =   $($parent).find("a.issue");
+      $(self.$parents)[index].parentUrl = $parentA.attr("href");
+      $(self.$parents)[index].parentId = $parentA.html().substring($parentA.html().indexOf("#")+1, $parentA.html().length);
+      $(self.$parents)[index].parentTitle = $parentA[0].nextSibling.nodeValue;
+      $(self.$parents)[index].parentTitle = this.parentTitle.substring(2, this.parentTitle.length);
+    });
   }
 }
 /*
