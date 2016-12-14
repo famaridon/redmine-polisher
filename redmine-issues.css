@@ -154,6 +154,39 @@ tr.issue td.subject {
   padding-left: 0 !important;
 }
 
+tr.status-3 td.subject a,
+tr.status-5 td.subject a,
+tr.status-6 td.subject a,
+tr.status-23 td.subject a{
+  color:#b3b3b3 !important;
+  text-decoration: line-through !important;
+  font-weight: normal !important;
+}
+td.status,
+td.cf_28{
+  color: #3d454c !important;
+  font-weight: normal !important;
+  font-size: 12px;
+}
+
+td.assigned_to a{
+  font-weight: normal !important;
+}
+
+tr.child td.subject,
+td.id{
+  font-weight: normal !important;
+}
+
+tr.parent td.subject{
+  font-weight: bold !important;
+}
+
+tr.tracker-36 td.subject,
+tr.tracker-41 td.subject{
+    font-weight: bold !important;
+}
+
 .indenter{
   margin-left: 5px;
 }
