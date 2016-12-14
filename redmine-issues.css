@@ -89,10 +89,6 @@ span.icon.data-tt-expender{
   transform: rotate(90deg);
 }
 
-.tooltipster-box #content{
-  width: 100%;
-}
-
 tr.odd.issue.child, tr.even.issue.child {
   background: #f6f7f8 !important;
 }
@@ -222,32 +218,4 @@ tr.isolated-child td:first-child {
     border-left: 2px solid #ca1e1e !important;
     border-left-color : #ca1e1e !important;
     color: white !important;
-}
-
-/* tooltips*/
-
-.tooltip-content h3{
-  color: #fff;
-  font-size: 18px;
-}
-
-.tooltip-content dl dd {
-  margin-left: 15px;
-}
-
-.tooltip-content dl dt {
-  font-weight: bold;
-  color: #2996CC;
-}
-
-.tooltip-content dl dt:after {
-  content: ' :';
-}
-
-.tooltip-content h3 {
-  color: #2996CC;
-}
-
-.tooltip-content .description p {
-  padding-bottom: 0;
 }

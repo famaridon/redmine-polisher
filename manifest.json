@@ -3,8 +3,8 @@
 
   "name": "Visiativ Redmine polisher",
   "description": "This extension polish redmine ui",
-  "version": "1.2.2",
-  "version_name": "1.2.2",
+  "version": "1.2.3",
+  "version_name": "1.2.3-SNAPSHOT",
   "options_page": "options.html",
   "browser_action": {
     "default_icon": "icon.png"
@@ -16,6 +16,7 @@
       ],
       "css": [
         "redmine-issues.css",
+        "redmine-tooltips.css",
         "js/tooltipster/css/tooltipster.core.css",
         "js/tooltipster/css/tooltipster.bundle.css",
         "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
@@ -25,6 +26,7 @@
       "js": [
         "js/jquery-3.1.1.js",
         "js/jquery.treetable.js",
+        "redmine-tooltips.js",
         "redmine-issues.js",
         "js/tooltipster/js/tooltipster.bundle.js",
         "js/textile/textile.js",
@@ -51,10 +53,17 @@
         "https://projects.visiativ.com/issues/*"
       ],
       "css": [
-        "redmine-issue.css"
+        "redmine-issue.css",
+        "redmine-tooltips.css",
+        "js/tooltipster/css/tooltipster.core.css",
+        "js/tooltipster/css/tooltipster.bundle.css",
+        "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css"
       ],
       "js": [
         "js/jquery-3.1.1.js",
+        "js/textile/textile.js",
+        "js/tooltipster/js/tooltipster.bundle.js",
+        "redmine-tooltips.js",
         "redmine-issue.js"
       ]
     }

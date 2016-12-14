@@ -16,7 +16,26 @@ $( document ).ready(function() {
     link.append(link[0].nextSibling.nodeValue);
      $(item).find("td.subject").html(link);
   });
+  chrome.storage.sync.get({
+    redmineAPIKey: null
+  }, function(configuration) {
+    console.info( "Configuration loaded : " );
+    console.debug( configuration );
+    redmineAPIKey = configuration.redmineAPIKey;
+    // get the base url
+    if (!location.origin) {
+      location.origin = location.protocol + "//" + location.host;
+    }
 
+
+    $("tr.issue").each(function(index, value){
+      var issue = $(value);
+      issue.attr('data-tt-id', issue.find("a.issue").attr('href').split('/')[2]);
+    });
+
+    tooltips = new Tooltips(redmineAPIKey,location.origin);
+    tooltips.setupTooltips();
+  });
 });
 
 class Subject{
