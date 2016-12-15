@@ -16,3 +16,7 @@
     color: #ccc;
     content: "/\00a0";
 }
+
+#issue_tree .list.issues .subject a{
+  color:#2996cc;
+}
