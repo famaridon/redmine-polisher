@@ -64,7 +64,7 @@ function countWorkload(){
   //count all the "charges"
   var total = 0;
   if($("td.cf_28").length > 0){
-    $("td.cf_28").each(function(index,item){
+    $("tr.tracker-36 td.cf_28").each(function(index,item){
       var val = parseFloat($(item).html());
       if(!isNaN(parseFloat(val)) && isFinite(val)){
         total += val;
