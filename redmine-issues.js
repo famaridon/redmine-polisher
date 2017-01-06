@@ -14,7 +14,7 @@ function rebuildIssuesTable(){
 
   haveCategory = $('.list.issues .issue .category').length > 0;
   if(haveCategory){
-    $('.list.issues th[title=\'Trier par "Categorie"\']').remove();
+    $('.list.issues th[title=\'Trier par "Catégorie"\']').remove();
     $('.list.issues th[title=\'Sort by "Category"\']').remove();
   }
 
@@ -93,7 +93,6 @@ function countWorkload(){
           }
         });
       })
-      debugger
       $('tr[data-tt-id="'+element+'"] .subject').append($("<span class=\"badge\">"+categoryWorkload+" Pts</span>"));
     });
   }
@@ -103,7 +102,7 @@ function setupTreeTable(){
   // start tree table
 
   categories.forEach(function(element,index) {
-    var lastChild = $("<tr data-tt-id=\""+element+"\" class=\"group\"><td></td><td></td><td class=\"subject\" colspan=\"10\">"+element+"</td></tr>").appendTo(issuesTable);
+    var lastChild = $("<tr data-tt-id=\""+element+"\" class=\"group\"><td class=\"checkbox\" ></td><td class=\"id\"></td><td class=\"subject\" colspan=\"10\">"+element+"</td></tr>").appendTo(issuesTable);
     $('.issue[data-tt-parent-id="'+element+'"]').each(function(index, child){
       var $child = $(child);
       lastChild.after($child);
