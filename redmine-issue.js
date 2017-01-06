@@ -6,6 +6,13 @@ $( document ).ready(function() {
 
   subject.$subject.html(subject.toBreadcrumbs());
 
+  $(".cf_29.attribute").appendTo($(".issue .attributes"));
+  var input = $("#issue_custom_field_values_29").closest("div[class^=\"splitcontent\"]");
+  input.removeClass("splitcontentright");
+  input.removeClass("splitcontentleft");
+  input.appendTo($("#update .attributes"));
+  input.find("textarea").attr("rows",10);
+
   // build support link
   var ticketId = $('div.cf_1 > div.value').html();
   var ticketLink = $('div.cf_3 > div.value').html();
