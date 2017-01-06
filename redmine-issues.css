@@ -236,6 +236,13 @@ tr.isolated-child td:first-child {
     margin-left: 10px;
 }
 
-.total-for-cf-28{
-  display: none;
+.total-for-cf-28 {
+  visibility: hidden;
+}
+
+table.issues .group td.checkbox{
+  width: 27px;
+}
+table.issues .group td.id{
+  width: 35px;
 }
