@@ -235,3 +235,7 @@ tr.isolated-child td:first-child {
     border-radius: 10px;
     margin-left: 10px;
 }
+
+.total-for-cf-28{
+  display: none;
+}

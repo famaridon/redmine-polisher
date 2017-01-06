@@ -14,7 +14,7 @@ function rebuildIssuesTable(){
 
   haveCategory = $('.list.issues .issue .category').length > 0;
   if(haveCategory){
-    $('.list.issues th[title=\'Trier par "Categorie"\']').remove();
+    $('.list.issues th[title=\'Trier par "Catégorie"\']').remove();
     $('.list.issues th[title=\'Sort by "Category"\']').remove();
   }
 
