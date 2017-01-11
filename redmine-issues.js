@@ -1,6 +1,8 @@
 var issuesTable = $(".list.issues");
 var redmineAPIKey = null;
 var project = null;
+var haveCategory = null;
+var categories = new Set();
 
 function rebuildIssuesTable(){
 
@@ -9,6 +11,12 @@ function rebuildIssuesTable(){
   $('.list.issues th[title=\'Sort by "Tracker"\']').remove();
   $('.list.issues th[title=\'Sort by "Parent task"\']').remove();
   $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();
+
+  haveCategory = $('.list.issues .issue .category').length > 0;
+  if(haveCategory){
+    $('.list.issues th[title=\'Trier par "Catégorie"\']').remove();
+    $('.list.issues th[title=\'Sort by "Category"\']').remove();
+  }
 
   $("tr.issue").each(function(index, value){
     var issue = $(value);
@@ -73,12 +81,42 @@ function countWorkload(){
     $('.list.issues th[title=\'Sort by "Charges (Pts)"\'] a').html(total + " pts");
     $('.list.issues th[title=\'Trier par "Charges (Pts)"\'] a').html(total + " pts");
   }
+
+  if(haveCategory){ // count workload by category
+    categories.forEach(function(element) {
+      var categoryWorkload = 0;
+      $('.issue[data-tt-parent-id="'+element+'"]').each(function(index, child) {
+        $(child).find("td.cf_28").each(function(index,item){
+          var val = parseFloat($(item).html());
+          if(!isNaN(parseFloat(val)) && isFinite(val)){
+            categoryWorkload += val;
+          }
+        });
+      })
+      $('tr[data-tt-id="'+element+'"] .subject').append($("<span class=\"badge\">"+categoryWorkload+" Pts</span>"));
+    });
+  }
 }
 
 function setupTreeTable(){
   // start tree table
+
+  categories.forEach(function(element,index) {
+    var lastChild = $("<tr data-tt-id=\""+element+"\" class=\"rp-category group\"><td class=\"checkbox\" ></td><td class=\"id\"></td><td class=\"subject\" colspan=\"10\">"+element+"</td></tr>").appendTo(issuesTable);
+    lastChild.on("click",function(event){
+      if(!$(event.target).hasClass("data-tt-expender")){
+        $(this).find(".data-tt-expender").click();
+      }
+    });
+    $('.issue[data-tt-parent-id="'+element+'"]').each(function(idx, child){
+      var $child = $(child);
+      lastChild.after($child);
+      lastChild = $child;
+    })
+  });
+
   // reorder table for treetable
-  $("tr.issue").each(function(index, issue){
+  issuesTable.find("tr").each(function(index, issue){
     var id = $(issue).attr('data-tt-id');
     var lastChild = $(issue);
     $('.issue[data-tt-parent-id="'+id+'"]').each(function(index, child){
@@ -241,10 +279,22 @@ function rebuildFixedVersion(version){
 }
 
 function buildParentLink(issue, parent){
-  if(typeof parent.attr('href') !== 'undefined')
+  var haveParent = typeof parent.attr('href') !== 'undefined';
+  if(haveCategory && ( issue.hasClass("tracker-36") || !haveParent ) ) // if we display category and issue is "Use case"
   {
+    // try to use categories
+    var category = $(issue).find(".category").html();
+    if(category !== ""){
+      categories.add(category);
+      issue.attr('data-tt-parent-id',category);
+    }
+  } else if(haveParent) {
     var parentId = /[^/]*$/.exec(parent.attr('href'))[0];
     issue.attr('data-tt-parent-id',parentId);
+  }
+
+  if(haveCategory){
+    $(issue).find(".category").remove();
   }
 }
 
@@ -280,10 +330,11 @@ $( document ).ready(function() {
     console.info( "Start rebuilding the DOM" );
     rebuildIssuesTable();
     rebuildSubjects();
-    countWorkload();
 
     console.info( "Setup the tree table" );
     setupTreeTable();
+
+    countWorkload();
 
     console.info( "Setup tooltips" );
     tooltips.setupTooltips();

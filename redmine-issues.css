@@ -233,3 +233,41 @@ tr.isolated-child td:first-child {
     border-left-color : #ca1e1e !important;
     color: white !important;
 }
+
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #2996CC;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.total-for-cf-28 {
+  visibility: hidden;
+}
+
+table.issues .group td.checkbox{
+  width: 27px;
+}
+table.issues .group td.id{
+  width: 35px;
+}
+
+tr.rp-category td.checkbox,
+tr.rp-category:hover td.checkbox,
+tr.rp-category td.id,
+tr.rp-category:hover td.id{
+  border-right: 1px solid white;
+}
+
+tr.rp-category td{
+  cursor: pointer;
+}
