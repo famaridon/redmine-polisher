@@ -258,7 +258,7 @@ function collapseIssues(){
 
 $( document ).ready(function() {
   console.info( "Redmine tools started!" );
-  chrome.storage.sync.get({
+  getStorage({
     redmineAPIKey: null
   }, function(configuration) {
     console.info( "Configuration loaded : " );
