@@ -25,3 +25,18 @@
 .tooltip-content .description p {
   padding-bottom: 0;
 }
+
+
+.tooltip-content .dl-horizontal dt {
+    float: left;
+    width: 160px;
+    overflow: hidden;
+    clear: left;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tooltip-content .dl-horizontal dd {
+    margin-left: 180px;
+}
