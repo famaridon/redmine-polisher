@@ -35,14 +35,20 @@ class Tooltips{
             }
 
             var title =$('<h3>' + trackerName + ' - ' + data.issue.subject + '</h3>');
-            var $workload = $.grep(data.issue.custom_fields, function(e){ return e.id == 28; })[0];
-            var workload =$('<dt>'+$workload.name+'</dt><dd class="description" >'+$workload.value+'</dd>');
             var description =$('<dt>Description</dt><dd class="description" >'+textile.parse(data.issue.description)+'</dd>');
 
-            var dom = $('<div></div>').addClass('tooltip-content')
-              .append(title)
-              .append($('<dl class="dl-horizontal"></dl>').append(workload))
-              .append($('<dl></dl>').append( description ));
+            var dom = $('<div></div>').addClass('tooltip-content').append(title);
+
+            var $workload = $('<dt>Charges (Pts)</dt><dd class="description" >-</dd>');
+            if(typeof data.issue.custom_fields != 'undefined'){
+              var workload = $.grep(data.issue.custom_fields, function(e){ return e.id == 28; })[0];
+              if(typeof workload != 'undefined'){
+                $workload = $('<dt>'+workload.name+'</dt><dd class="description" >'+workload.value+'</dd>');
+              }
+            }
+            dom.append($('<dl class="dl-horizontal"></dl>').append($workload));
+
+            dom.append($('<dl></dl>').append( description ));
             instance.content(dom);
           }
         });
