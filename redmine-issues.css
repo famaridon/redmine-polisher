@@ -246,3 +246,14 @@ table.issues .group td.checkbox{
 table.issues .group td.id{
   width: 35px;
 }
+
+tr.rp-category td.checkbox,
+tr.rp-category:hover td.checkbox,
+tr.rp-category td.id,
+tr.rp-category:hover td.id{
+  border-right: 1px solid white;
+}
+
+tr.rp-category td{
+  cursor: pointer;
+}

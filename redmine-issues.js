@@ -102,8 +102,13 @@ function setupTreeTable(){
   // start tree table
 
   categories.forEach(function(element,index) {
-    var lastChild = $("<tr data-tt-id=\""+element+"\" class=\"group\"><td class=\"checkbox\" ></td><td class=\"id\"></td><td class=\"subject\" colspan=\"10\">"+element+"</td></tr>").appendTo(issuesTable);
-    $('.issue[data-tt-parent-id="'+element+'"]').each(function(index, child){
+    var lastChild = $("<tr data-tt-id=\""+element+"\" class=\"rp-category group\"><td class=\"checkbox\" ></td><td class=\"id\"></td><td class=\"subject\" colspan=\"10\">"+element+"</td></tr>").appendTo(issuesTable);
+    lastChild.on("click",function(event){
+      if(!$(event.target).hasClass("data-tt-expender")){
+        $(this).find(".data-tt-expender").click();
+      }
+    });
+    $('.issue[data-tt-parent-id="'+element+'"]').each(function(idx, child){
       var $child = $(child);
       lastChild.after($child);
       lastChild = $child;
