@@ -22,6 +22,8 @@ function rebuildIssuesTable(){
     var issue = $(value);
     rebuildIssue(issue);
   });
+
+  deduplicateBugStories();
 }
 
 function rebuildIssue(issue){
@@ -46,6 +48,7 @@ function rebuildIssue(issue){
 
   // append bugs if it's a [BUG-STORY] user story
   if(issue.find("td.subject a").text().startsWith("[BUG-STORY]")){
+    issue.attr("data-redmine-polisher-bugstory","true");
     $.ajax({
       method: "GET",
       url: "https://projects.visiativ.com/issues.json?status_id=*&sort=priority:desc&parent_id="+issue.attr('data-tt-id'),
@@ -56,11 +59,14 @@ function rebuildIssue(issue){
         data.issues.forEach(function(value) {
 
           var $issueTR = $("<tr></tr>");
-          $issueTR.attr("id",value.id);
+          $issueTR.attr("id","issue-" + value.id);
           $issueTR.addClass("hascontextmenu issue")
             .addClass("tracker-"+value.tracker.id)
             .addClass("status-"+value.status.id)
-            .addClass("priority-"+value.priority.id);
+            .addClass("priority-"+value.priority.id)
+            .addClass("child")
+            .addClass("odd")
+            .attr("data-redmine-polisher-isajax","true");
 
           $issueTR.append('<td class="checkbox hide-when-print"><input type="checkbox" name="ids[]" value="'+value.id+'"></td>')
           $issueTR.append('<td class="id"><a href="/issues/'+value.id+'">'+value.id+'</a></td>');
@@ -101,6 +107,13 @@ function rebuildIssue(issue){
     });
   }
 
+}
+
+// remove issues under a [BUG-STORY] not loaded by rebuildIssue ajax GET
+function deduplicateBugStories(){
+  $("tr[data-redmine-polisher-bugstory=\"true\"]").each(function(index,elem){
+    $("tr[data-tt-parent-id='" + $(elem).data("tt-id") + "']:not([data-redmine-polisher-isajax='true'])").remove();
+  });
 }
 
 function rebuildSubjects(){
