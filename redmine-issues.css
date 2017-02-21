@@ -144,6 +144,11 @@ tr.status-23 td.subject a{
   text-decoration: line-through !important;
   font-weight: normal !important;
 }
+
+tr.status-24 td.subject a{
+  color:#b3b3b3 !important;
+  font-weight: normal !important;
+}
 td.status,
 td.cf_28{
   color: #3d454c !important;
