@@ -37,3 +37,39 @@ td.subject a.status-23{
   text-decoration: line-through !important;
   font-weight: normal !important;
 }
+
+/* issue history layout */
+.journal{
+  border-bottom: 1px solid lightgrey;
+  padding: 10px 15px;
+}
+
+.journal.has-notes {
+  background-color: #f5f3f3;
+}
+
+.journal h4{
+  display: inline-block;
+  border-bottom: none;
+  margin-top: 3px;
+  min-width: 420px;
+    vertical-align: top;
+}
+
+.journal ul.details{
+  display: inline-block;
+  margin-top: 0;
+  font-size: 12px;
+  margin-bottom: 0 !important;
+}
+
+.journal .journal-link {
+  float: none;
+  margin-top: 3px;
+  display: inline-block;
+  width: 28px;
+}
+
+#history{
+  margin-bottom: 25px;
+}

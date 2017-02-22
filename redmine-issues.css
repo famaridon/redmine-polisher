@@ -262,3 +262,17 @@ tr.rp-category:hover td.id{
 tr.rp-category td{
   cursor: pointer;
 }
+
+.contextual a.icon{
+    background-color: #1570b7;
+    padding: 10px;
+    color: white !important;
+    font-size: 15px;
+    background-position: 5px;
+    padding-left: 25px;
+}
+
+.contextual a.icon:hover{
+  background-color: #15609a;
+  text-decoration: none;
+}
