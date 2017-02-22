@@ -1,0 +1,44 @@
+/* Header */
+.theme-Visiativ2016 #header > h1 {
+    padding: 5px 0px 15px 140px;
+    background-size: 110px;
+}
+
+.theme-Visiativ2016 #quick-search {
+    margin-top: 5px;
+}
+
+/* Buttons */
+
+#relations .contextual a,
+#issue_tree .contextual a,
+.contextual a.icon{
+    background-color: #1570b7;
+    padding: 10px;
+    color: white !important;
+    font-size: 15px;
+    background-position: 5px;
+}
+
+#relations .contextual a,
+#issue_tree .contextual a{
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.contextual a.icon{
+  padding-left: 25px;
+}
+
+#relations .contextual a:hover,
+#issue_tree .contextual a:hover,
+.contextual a.icon:hover{
+  background-color: #15609a;
+  text-decoration: none;
+}
+
+/* RSS PDF buttons */
+
+.other-formats{
+  margin-top: 30px;
+}

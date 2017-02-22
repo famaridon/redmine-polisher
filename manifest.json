@@ -12,68 +12,75 @@
   "content_scripts": [
     {
       "matches": [
-        "https://projects.visiativ.com/*/issues*"
+        "https://projects.visiativ.com/*"
       ],
       "css": [
-        "redmine-issues.css",
-        "redmine-tooltips.css",
-        "js/tooltipster/css/tooltipster.core.css",
-        "js/tooltipster/css/tooltipster.bundle.css",
-        "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
-        "js/jquery-editable/css/jquery-editable.css",
-        "js/poshytip/tip-default/tip-default.css"
-      ],
-      "js": [
-        "js/jquery-3.1.1.js",
-        "js/jquery.treetable.js",
-        "redmine-tooltips.js",
-        "redmine-issues.js",
-        "js/tooltipster/js/tooltipster.bundle.js",
-        "js/textile/textile.js",
-        "js/poshytip/jquery.poshytip.js",
-        "js/jquery-editable/js/jquery-editable-poshytip.js"
+        "redmine-global.css"
       ]
-    },
-    {
-      "matches": [
-        "https://projects.visiativ.com/projects"
-      ],
-      "css": [
-        "redmine-projects.css",
-        "js/jstree/themes/default/style.css"
-      ],
-      "js": [
-        "js/jquery-3.1.1.js",
-        "js/jstree/jstree.js",
-        "redmine-projects.js"
-      ]
-    },
-    {
-      "matches": [
-        "https://projects.visiativ.com/issues/*"
-      ],
-      "css": [
-        "redmine-issue.css",
-        "redmine-tooltips.css",
-        "js/tooltipster/css/tooltipster.core.css",
-        "js/tooltipster/css/tooltipster.bundle.css",
-        "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css"
-      ],
-      "js": [
-        "js/jquery-3.1.1.js",
-        "js/textile/textile.js",
-        "js/tooltipster/js/tooltipster.bundle.js",
-        "redmine-tooltips.js",
-        "redmine-issue.js"
-      ]
-    }
-  ],
-  "permissions": [
-    "webNavigation",
-    "storage"
-  ],
-  "web_accessible_resources": [
-    "images/*",
-    "js/*"
-  ]
-}
+      },{
+        "matches": [
+          "https://projects.visiativ.com/*/issues*"
+        ],
+        "css": [
+          "redmine-issues.css",
+          "redmine-tooltips.css",
+          "js/tooltipster/css/tooltipster.core.css",
+          "js/tooltipster/css/tooltipster.bundle.css",
+          "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
+          "js/jquery-editable/css/jquery-editable.css",
+          "js/poshytip/tip-default/tip-default.css"
+        ],
+        "js": [
+          "js/jquery-3.1.1.js",
+          "js/jquery.treetable.js",
+          "redmine-tooltips.js",
+          "redmine-issues.js",
+          "js/tooltipster/js/tooltipster.bundle.js",
+          "js/textile/textile.js",
+          "js/poshytip/jquery.poshytip.js",
+          "js/jquery-editable/js/jquery-editable-poshytip.js"
+        ]
+      },
+      {
+        "matches": [
+          "https://projects.visiativ.com/projects"
+        ],
+        "css": [
+          "redmine-projects.css",
+          "js/jstree/themes/default/style.css"
+        ],
+        "js": [
+          "js/jquery-3.1.1.js",
+          "js/jstree/jstree.js",
+          "redmine-projects.js"
+        ]
+      },
+      {
+        "matches": [
+          "https://projects.visiativ.com/issues/*"
+        ],
+        "css": [
+          "redmine-issue.css",
+          "redmine-tooltips.css",
+          "js/tooltipster/css/tooltipster.core.css",
+          "js/tooltipster/css/tooltipster.bundle.css",
+          "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css"
+        ],
+        "js": [
+          "js/jquery-3.1.1.js",
+          "js/textile/textile.js",
+          "js/tooltipster/js/tooltipster.bundle.js",
+          "redmine-tooltips.js",
+          "redmine-issue.js"
+        ]
+      }
+    ],
+    "permissions": [
+      "webNavigation",
+      "storage"
+    ],
+    "web_accessible_resources": [
+      "images/*",
+      "js/*"
+    ]
+  }
