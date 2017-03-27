@@ -206,6 +206,10 @@ function setupTreeTable(){
     'expanderTemplate':'<span class="data-tt-expender  icon icon-arrow-right"></span>'
   });
 
+  categories.forEach(function(element,index) {
+    issuesTable.treetable('expandNode', element);
+  });
+
   var expandAllButton = $("<a class=\"icon icon-arrow-down expand-all-button\">Expand all</a>").css("cursor","pointer").on('click',expandIssues);
   $("#query_form_with_buttons p.buttons").append(expandAllButton);
   var collapseAllButton = $("<a class=\"icon icon-arrow-up collapse-all-button\">Collapse all</a>").css("cursor","pointer").on('click',collapseIssues);
