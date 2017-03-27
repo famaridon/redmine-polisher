@@ -31,8 +31,7 @@ div.issue{
 
 td.subject a.status-3,
 td.subject a.status-5,
-td.subject a.status-6,
-td.subject a.status-23{
+td.subject a.status-6{
   color:#b3b3b3 !important;
   text-decoration: line-through !important;
   font-weight: normal !important;
