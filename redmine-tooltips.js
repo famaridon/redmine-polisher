@@ -6,10 +6,10 @@ class Tooltips{
     this.url = url;
   }
 
-  setupTooltips(){
+  setupTooltips($element){
     var self = this;
     // start tooltipster
-    $(".subject a").tooltipster({
+    $element.tooltipster({
       content: 'Loading...',
       contentAsHTML: true,
       animation: 'fade',

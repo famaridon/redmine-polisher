@@ -99,10 +99,11 @@ function rebuildIssue(issue){
 
           var ttnode = $(issuesTable).treetable("node", issue.attr('data-tt-id'));
           $(issuesTable).treetable("loadBranch", ttnode, $issueTR);
-          //issue.after($issueTR);
+
+          tooltips.setupTooltips($issueTR.find(".subject a"));
         });
         $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
-        tooltips.setupTooltips();
+
       }
     });
   }
@@ -127,6 +128,7 @@ function rebuildSubjects(){
       'overflow':'hidden',
       'text-overflow':'ellipsis'
     });
+    tooltips.setupTooltips($(subject).find("a"));
     if($(issue).hasClass("child") && !$("#issue-" + $(issue).attr("data-tt-parent-id")).length){
       if($(issue).find("td.subject .icon").hasClass("icon-user-story")){
         $(issue).addClass("isolated-parent");
@@ -405,9 +407,6 @@ $( document ).ready(function() {
     setupTreeTable();
 
     countWorkload();
-
-    console.info( "Setup tooltips" );
-    tooltips.setupTooltips();
   });
 });
 
