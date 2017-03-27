@@ -34,14 +34,14 @@ $( document ).ready(function() {
       location.origin = location.protocol + "//" + location.host;
     }
 
+    tooltips = new Tooltips(redmineAPIKey,location.origin);
 
     $("tr.issue").each(function(index, value){
       var issue = $(value);
       issue.attr('data-tt-id', issue.find("a.issue").attr('href').split('/')[2]);
+      tooltips.setupTooltips(issue.find(".subject a"));
     });
 
-    tooltips = new Tooltips(redmineAPIKey,location.origin);
-    tooltips.setupTooltips();
   });
 });
 
@@ -84,15 +84,3 @@ class SubjectParent{
     });
   }
 }
-/*
-<div class="subject">
-  <div>
-    <p>
-      <a class="issue tracker-36 status-1 priority-3 priority-lowest parent created-by-me assigned-to-me" href="/issues/21460">R&amp;D INNOVATION - User story #21460</a> : Plugin Redmine
-    </p>
-    <div>
-      <h3>Rendre le champ "Ticket support" cliquable</h3>
-    </div>
-  </div>
-</div>
-*/
