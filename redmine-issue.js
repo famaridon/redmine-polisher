@@ -23,7 +23,7 @@ $( document ).ready(function() {
     link.append(link[0].nextSibling.nodeValue);
      $(item).find("td.subject").html(link);
   });
-  chrome.storage.sync.get({
+  getStorage({
     redmineAPIKey: null
   }, function(configuration) {
     console.info( "Configuration loaded : " );
