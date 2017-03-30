@@ -80,7 +80,7 @@ function rebuildIssue(issue){
             $assigned_to.append($('<a class="user active" href="/users/'+value.assigned_to.id+'">'+value.assigned_to.name+'</a>'));
           }
           $issueTR.append($assigned_to);
-          $issueTR.append('<td class="done_ratio"></td>');
+          $issueTR.append('<td class="done_ratio"><progress max="100" value="'+value.done_ratio+'"></progress></td>');
           $issueTR.append('<td class="parent"></td>');
 
           var $workload = $('<td class="cf_28 int">-</td>');
