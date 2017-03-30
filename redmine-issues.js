@@ -105,8 +105,6 @@ function rebuildIssue(issue){
 
           var ttnode = $(issuesTable).treetable("node", issue.attr('data-tt-id'));
           $(issuesTable).treetable("loadBranch", ttnode, $issueTR);
-
-          tooltips.setupTooltips($issueTR.find(".subject a"));
         });
         $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
 
