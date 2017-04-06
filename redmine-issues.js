@@ -63,7 +63,6 @@ function rebuildIssue(issue){
       },
       success : function(data){
         data.relations.forEach(function(relation){
-          console.log(relation);
           $.ajax({
             method: "GET",
             url: "https://projects.visiativ.com/issues/"+relation.issue_to_id+".json",
@@ -75,12 +74,12 @@ function rebuildIssue(issue){
               var $issueTR = $("<tr></tr>");
               $issueTR.attr("id","issue-" + value.id);
               $issueTR.addClass("hascontextmenu issue")
-                .addClass("tracker-"+value.tracker.id)
-                .addClass("status-"+value.status.id)
-                .addClass("priority-"+value.priority.id)
-                .addClass("child")
-                .addClass("odd")
-                .attr("data-redmine-polisher-isajax","true");
+              .addClass("tracker-"+value.tracker.id)
+              .addClass("status-"+value.status.id)
+              .addClass("priority-"+value.priority.id)
+              .addClass("child")
+              .addClass("odd")
+              .attr("data-redmine-polisher-isajax","true");
 
               $issueTR.append('<td class="checkbox hide-when-print"><input type="checkbox" name="ids[]" value="'+value.id+'"></td>')
               $issueTR.append('<td class="id"><a href="/issues/'+value.id+'">'+value.id+'</a></td>');
@@ -88,6 +87,7 @@ function rebuildIssue(issue){
               $issueTR.append('<td class="subject"><a href="/issues/'+value.id+'">'+value.subject+'</a></td>');
               $issueTR.append('<td class="status">'+value.status.name+'</td>');
               $issueTR.append('<td class="priority">'+value.priority.name+'</td>');
+              $issueTR.attr("data-redmine-polisher-priority",value.priority.id);
 
               var $assigned_to = $('<td class="assigned_to"></td>');
               if(typeof value.assigned_to != 'undefined'){
@@ -114,6 +114,13 @@ function rebuildIssue(issue){
               var ttnode = $(issuesTable).treetable("node", issue.attr('data-tt-id'));
               $(issuesTable).treetable("loadBranch", ttnode, $issueTR);
               $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
+              $(issuesTable).treetable("sortBranch", ttnode, function(a,b){
+                var valA = a.row.attr("data-redmine-polisher-priority");
+                var valB = b.row.attr("data-redmine-polisher-priority");
+                if (valA < valB) return 1;
+                if (valA > valB) return -1;
+                return 0;
+              });
             }
           });
         });
@@ -496,8 +503,8 @@ class Project {
 }
 
 function async(your_function, callback) {
-    setTimeout(function() {
-        your_function();
-        if (callback) {callback();}
-    }, 0);
+  setTimeout(function() {
+    your_function();
+    if (callback) {callback();}
+  }, 0);
 }
