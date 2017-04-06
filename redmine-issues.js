@@ -1,5 +1,7 @@
 var issuesTable = $(".list.issues");
 var redmineAPIKey = null;
+var enableInlineEdit = true;
+var defaultState = "categories";
 var project = null;
 var haveCategory = null;
 var categories = new Set();
@@ -23,7 +25,6 @@ function rebuildIssuesTable(){
     rebuildIssue(issue);
   });
 
-  deduplicateBugStories();
 }
 
 function rebuildIssue(issue){
@@ -113,7 +114,9 @@ function rebuildIssue(issue){
 
               var ttnode = $(issuesTable).treetable("node", issue.attr('data-tt-id'));
               $(issuesTable).treetable("loadBranch", ttnode, $issueTR);
-              $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
+              if(defaultState !== "expanded"){
+                $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
+              }
               $(issuesTable).treetable("sortBranch", ttnode, function(a,b){
                 var valA = a.row.attr("data-redmine-polisher-priority");
                 var valB = b.row.attr("data-redmine-polisher-priority");
@@ -128,13 +131,6 @@ function rebuildIssue(issue){
     });
   }
 
-}
-
-// remove issues under a [BUG-STORY] not loaded by rebuildIssue ajax GET
-function deduplicateBugStories(){
-  $("tr[data-redmine-polisher-bugstory=\"true\"]").each(function(index,elem){
-    $("tr[data-tt-parent-id='" + $(elem).data("tt-id") + "']:not([data-redmine-polisher-isajax='true'])").remove();
-  });
 }
 
 function rebuildSubjects(){
@@ -233,16 +229,20 @@ function setupTreeTable(){
 
   var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();
   subjectColumn = subjectColumn === -1 ? 1 : subjectColumn;
+
   var issuesTreetable = issuesTable.treetable({
     'column': subjectColumn,
     'expandable': true,
+    'initialState' : defaultState === "expanded" ? "expanded": "collapsed",
     'onNodeExpand': onNodeExpand,
     'expanderTemplate':'<span class="data-tt-expender  icon icon-arrow-right"></span>'
   });
 
-  categories.forEach(function(element,index) {
-    issuesTable.treetable('expandNode', element);
-  });
+  if(defaultState === "categories"){
+    categories.forEach(function(element,index) {
+      issuesTable.treetable('expandNode', element);
+    });
+  }
 
   var expandAllButton = $("<a class=\"icon icon-arrow-down expand-all-button\">Expand all</a>").css("cursor","pointer").on('click',expandIssues);
   $("#query_form_with_buttons p.buttons").append(expandAllButton);
@@ -261,64 +261,71 @@ function rebuildDoneRatio(issue){
     var css = $doneRatio.attr('class');
     var doneRatio = css.substring(css.indexOf("-")+1,css.length);
 
-    issue.find("td.done_ratio").editable({
-      type: 'range',
-      value: doneRatio,
-      title: 'Enter done %',
-      tpl: '<input type="range" min="0" max="100" step="10" /><output></output>',
-      display: function(value, sourceData) {
-        $(this).html('<progress max="100" value="'+value+'"></progress>');
-      },
-      url: function(params) {
-        var issueId = issue.data('tt-id');
-        var deferred = $.ajax({
-          method: "PUT",
-          url: "https://projects.visiativ.com/issues/"+issueId+".json",
-          headers: {
-            'X-Redmine-API-Key': redmineAPIKey
-          },
-          contentType: "application/json; charset=utf-8",
-          dataType: 'text',
-          data: JSON.stringify({
-            "issue": {
-              "done_ratio": params.value
-            }
-          })
-        });
-        return deferred;
-      }
-    });
+    if(enableInlineEdit){
+      issue.find("td.done_ratio").editable({
+        type: 'range',
+        value: doneRatio,
+        title: 'Enter done %',
+        tpl: '<input type="range" min="0" max="100" step="10" /><output></output>',
+        display: function(value, sourceData) {
+          $(this).html('<progress max="100" value="'+value+'"></progress>');
+        },
+        url: function(params) {
+          var issueId = issue.data('tt-id');
+          var deferred = $.ajax({
+            method: "PUT",
+            url: "https://projects.visiativ.com/issues/"+issueId+".json",
+            headers: {
+              'X-Redmine-API-Key': redmineAPIKey
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: 'text',
+            data: JSON.stringify({
+              "issue": {
+                "done_ratio": params.value
+              }
+            })
+          });
+          return deferred;
+        }
+      });
+    }else{
+      $doneRatio.html('<progress max="100" value="'+doneRatio+'"></progress>');
+    }
+
   });
 }
 
 function rebuildWorkload(issue){
-  async(function(){
-    issue.find("td.cf_28").editable({
-      type: 'text',
-      emptytext: '-',
-      title: 'Enter workload in points',
-      url: function(params) {
-        var issueId = issue.data('tt-id');
-        var deferred = $.ajax({
-          method: "PUT",
-          url: "https://projects.visiativ.com/issues/"+issueId+".json",
-          headers: {
-            'X-Redmine-API-Key': redmineAPIKey
-          },
-          contentType: "application/json; charset=utf-8",
-          dataType: 'text',
-          data: JSON.stringify({
-            "issue": {
-              "custom_fields": [
-                {"id": 28, "value": params.value }
-              ]
-            }
-          })
-        });
-        return deferred;
-      }
+  if(enableInlineEdit){
+    async(function(){
+      issue.find("td.cf_28").editable({
+        type: 'text',
+        emptytext: '-',
+        title: 'Enter workload in points',
+        url: function(params) {
+          var issueId = issue.data('tt-id');
+          var deferred = $.ajax({
+            method: "PUT",
+            url: "https://projects.visiativ.com/issues/"+issueId+".json",
+            headers: {
+              'X-Redmine-API-Key': redmineAPIKey
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: 'text',
+            data: JSON.stringify({
+              "issue": {
+                "custom_fields": [
+                  {"id": 28, "value": params.value }
+                ]
+              }
+            })
+          });
+          return deferred;
+        }
+      });
     });
-  });
+  }
 }
 
 function rebuildAssignedTo(issue){
@@ -334,41 +341,43 @@ function rebuildAssignedTo(issue){
       username = $a.html();
     }
     project.getMembers().done(function(members){
-      $assignedTo.editable({
-        type: 'select',
-        value: userid,
-        emptytext: '-',
-        title: 'Assigned to',
-        display: function(value, sourceData, response) {
-          $(members).each(function(index, member){
-            if(member.value == value)
-            {
-              $assignedTo.html(member.text);
-              return false;
-            }
-          });
-
-        },
-        source: members,
-        url: function(params) {
-          var issueId = issue.data('tt-id');
-          var deferred = $.ajax({
-            method: "PUT",
-            url: "https://projects.visiativ.com/issues/"+issueId+".json",
-            headers: {
-              'X-Redmine-API-Key': redmineAPIKey
-            },
-            contentType: "application/json; charset=utf-8",
-            dataType: 'text',
-            data: JSON.stringify({
-              "issue": {
-                "assigned_to_id":  params.value
+      if(enableInlineEdit){
+        $assignedTo.editable({
+          type: 'select',
+          value: userid,
+          emptytext: '-',
+          title: 'Assigned to',
+          display: function(value, sourceData, response) {
+            $(members).each(function(index, member){
+              if(member.value == value)
+              {
+                $assignedTo.html(member.text);
+                return false;
               }
-            })
-          });
-          return deferred;
-        }
-      });
+            });
+
+          },
+          source: members,
+          url: function(params) {
+            var issueId = issue.data('tt-id');
+            var deferred = $.ajax({
+              method: "PUT",
+              url: "https://projects.visiativ.com/issues/"+issueId+".json",
+              headers: {
+                'X-Redmine-API-Key': redmineAPIKey
+              },
+              contentType: "application/json; charset=utf-8",
+              dataType: 'text',
+              data: JSON.stringify({
+                "issue": {
+                  "assigned_to_id":  params.value
+                }
+              })
+            });
+            return deferred;
+          }
+        });
+      }
     });
   });
 }
@@ -425,11 +434,15 @@ function collapseIssues(){
 $( document ).ready(function() {
   console.info( "Redmine tools started!" );
   chrome.storage.sync.get({
-    redmineAPIKey: null
+    redmineAPIKey: null,
+    enableInlineEdit: true,
+    defaultState: "categories"
   }, function(configuration) {
     console.info( "Configuration loaded : " );
     console.debug( configuration );
     redmineAPIKey = configuration.redmineAPIKey;
+    enableInlineEdit = configuration.enableInlineEdit;
+    defaultState = configuration.defaultState;
     // get the base url
     if (!location.origin) {
       location.origin = location.protocol + "//" + location.host;

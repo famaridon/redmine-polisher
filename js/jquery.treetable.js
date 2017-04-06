@@ -83,7 +83,9 @@
         this.settings.onNodeExpand.apply(this);
       }
 
-      if ($(this.row).is(":visible")) {
+      // if ($(this.row).is(":visible")) {
+      var style = window.getComputedStyle(this.row.get(0));
+      if(style.display !== 'none'){
         this._showChildren();
       }
 
