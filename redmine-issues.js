@@ -1,5 +1,7 @@
 var issuesTable = $(".list.issues");
 var redmineAPIKey = null;
+var enableInlineEdit = true;
+var defaultState = "categories";
 var project = null;
 var haveCategory = null;
 var categories = new Set();
@@ -23,7 +25,6 @@ function rebuildIssuesTable(){
     rebuildIssue(issue);
   });
 
-  deduplicateBugStories();
 }
 
 function rebuildIssue(issue){
@@ -57,68 +58,79 @@ function rebuildIssue(issue){
     issue.attr("data-redmine-polisher-bugstory","true");
     $.ajax({
       method: "GET",
-      url: "https://projects.visiativ.com/issues.json?status_id=*&sort=priority:desc&parent_id="+issue.attr('data-tt-id'),
+      url: "https://projects.visiativ.com/issues/"+issue.attr('data-tt-id')+"/relations.json",
       headers: {
         'X-Redmine-API-Key': redmineAPIKey
       },
       success : function(data){
-        data.issues.forEach(function(value) {
+        data.relations.forEach(function(relation){
+          $.ajax({
+            method: "GET",
+            url: "https://projects.visiativ.com/issues/"+relation.issue_to_id+".json",
+            headers: {
+              'X-Redmine-API-Key': redmineAPIKey
+            },
+            success : function(data){
+              var value = data.issue
+              var $issueTR = $("<tr></tr>");
+              $issueTR.attr("id","issue-" + value.id);
+              $issueTR.addClass("hascontextmenu issue")
+              .addClass("tracker-"+value.tracker.id)
+              .addClass("status-"+value.status.id)
+              .addClass("priority-"+value.priority.id)
+              .addClass("child")
+              .addClass("odd")
+              .attr("data-redmine-polisher-isajax","true");
 
-          var $issueTR = $("<tr></tr>");
-          $issueTR.attr("id","issue-" + value.id);
-          $issueTR.addClass("hascontextmenu issue")
-            .addClass("tracker-"+value.tracker.id)
-            .addClass("status-"+value.status.id)
-            .addClass("priority-"+value.priority.id)
-            .addClass("child")
-            .addClass("odd")
-            .attr("data-redmine-polisher-isajax","true");
+              $issueTR.append('<td class="checkbox hide-when-print"><input type="checkbox" name="ids[]" value="'+value.id+'"></td>')
+              $issueTR.append('<td class="id"><a href="/issues/'+value.id+'">'+value.id+'</a></td>');
+              $issueTR.append('<td class="tracker">'+value.tracker.name+'</td>');
+              $issueTR.append('<td class="subject"><a href="/issues/'+value.id+'">'+value.subject+'</a></td>');
+              $issueTR.append('<td class="status">'+value.status.name+'</td>');
+              $issueTR.append('<td class="priority">'+value.priority.name+'</td>');
+              $issueTR.attr("data-redmine-polisher-priority",value.priority.id);
 
-          $issueTR.append('<td class="checkbox hide-when-print"><input type="checkbox" name="ids[]" value="'+value.id+'"></td>')
-          $issueTR.append('<td class="id"><a href="/issues/'+value.id+'">'+value.id+'</a></td>');
-          $issueTR.append('<td class="tracker">'+value.tracker.name+'</td>');
-          $issueTR.append('<td class="subject"><a href="/issues/'+value.id+'">'+value.subject+'</a></td>');
-          $issueTR.append('<td class="status">'+value.status.name+'</td>');
-          $issueTR.append('<td class="priority">'+value.priority.name+'</td>');
+              var $assigned_to = $('<td class="assigned_to"></td>');
+              if(typeof value.assigned_to != 'undefined'){
+                $assigned_to.append($('<a class="user active" href="/users/'+value.assigned_to.id+'">'+value.assigned_to.name+'</a>'));
+              }
+              $issueTR.append($assigned_to);
+              $issueTR.append('<td class="done_ratio"><progress max="100" value="'+value.done_ratio+'"></progress></td>');
+              $issueTR.append('<td class="parent"></td>');
 
-          var $assigned_to = $('<td class="assigned_to"></td>');
-          if(typeof value.assigned_to != 'undefined'){
-            $assigned_to.append($('<a class="user active" href="/users/'+value.assigned_to.id+'">'+value.assigned_to.name+'</a>'));
-          }
-          $issueTR.append($assigned_to);
-          $issueTR.append('<td class="done_ratio"><progress max="100" value="'+value.done_ratio+'"></progress></td>');
-          $issueTR.append('<td class="parent"></td>');
+              var $workload = $('<td class="cf_28 int">-</td>');
+              if(typeof value.custom_fields != 'undefined'){
+                var workload = $.grep(value.custom_fields, function(e){ return e.id == 28; })[0];
+                if(typeof workload != 'undefined'){
+                  $workload.text(workload.value);
+                }
+              }
+              $issueTR.append($workload);
+              $issueTR.append('<td class="category">VDoc-Dev</td>');
 
-          var $workload = $('<td class="cf_28 int">-</td>');
-          if(typeof value.custom_fields != 'undefined'){
-            var workload = $.grep(value.custom_fields, function(e){ return e.id == 28; })[0];
-            if(typeof workload != 'undefined'){
-              $workload.text(workload.value);
+              rebuildIssue($issueTR);
+              $issueTR.attr("data-tt-id",value.id);
+              $issueTR.attr("data-tt-parent-id",issue.attr('data-tt-id'));
+
+              var ttnode = $(issuesTable).treetable("node", issue.attr('data-tt-id'));
+              $(issuesTable).treetable("loadBranch", ttnode, $issueTR);
+              if(defaultState !== "expanded"){
+                $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
+              }
+              $(issuesTable).treetable("sortBranch", ttnode, function(a,b){
+                var valA = a.row.attr("data-redmine-polisher-priority");
+                var valB = b.row.attr("data-redmine-polisher-priority");
+                if (valA < valB) return 1;
+                if (valA > valB) return -1;
+                return 0;
+              });
             }
-          }
-          $issueTR.append($workload);
-          $issueTR.append('<td class="category">VDoc-Dev</td>');
-
-          rebuildIssue($issueTR);
-          $issueTR.attr("data-tt-id",value.id);
-          $issueTR.attr("data-tt-parent-id",issue.attr('data-tt-id'));
-
-          var ttnode = $(issuesTable).treetable("node", issue.attr('data-tt-id'));
-          $(issuesTable).treetable("loadBranch", ttnode, $issueTR);
+          });
         });
-        $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
-
       }
     });
   }
 
-}
-
-// remove issues under a [BUG-STORY] not loaded by rebuildIssue ajax GET
-function deduplicateBugStories(){
-  $("tr[data-redmine-polisher-bugstory=\"true\"]").each(function(index,elem){
-    $("tr[data-tt-parent-id='" + $(elem).data("tt-id") + "']:not([data-redmine-polisher-isajax='true'])").remove();
-  });
 }
 
 function rebuildSubjects(){
@@ -131,13 +143,7 @@ function rebuildSubjects(){
 function rebuildSubject(index, issue){
   async(function(){
     var subject = $(issue).find("td.subject");
-    var initialWidth = subject.width();
-    $(subject).find("a").css("max-width", initialWidth - 75).css({
-      'display':'inline-block',
-      'white-space':'nowrap',
-      'overflow':'hidden',
-      'text-overflow':'ellipsis'
-    });
+    autoSizeSubject(subject);
     if($(issue).hasClass("child") && !$("#issue-" + $(issue).attr("data-tt-parent-id")).length){
       if($(issue).find("td.subject .icon").hasClass("icon-user-story")){
         $(issue).addClass("isolated-parent");
@@ -147,6 +153,20 @@ function rebuildSubject(index, issue){
       }
     }
   })
+}
+
+function autoSizeSubject($subject){
+
+  var initialWidth = $subject.width();
+  if(initialWidth <= 0){
+    return; // it's an hidden element
+  }
+  $subject.find("a").css("max-width", initialWidth - 75).css({
+    'display':'inline-block',
+    'white-space':'nowrap',
+    'overflow':'hidden',
+    'text-overflow':'ellipsis'
+  });
 }
 
 function countWorkload(){
@@ -209,15 +229,20 @@ function setupTreeTable(){
 
   var subjectColumn = issuesTable.find("tr.issue:first td.subject").index();
   subjectColumn = subjectColumn === -1 ? 1 : subjectColumn;
+
   var issuesTreetable = issuesTable.treetable({
     'column': subjectColumn,
     'expandable': true,
+    'initialState' : defaultState === "expanded" ? "expanded": "collapsed",
+    'onNodeExpand': onNodeExpand,
     'expanderTemplate':'<span class="data-tt-expender  icon icon-arrow-right"></span>'
   });
 
-  categories.forEach(function(element,index) {
-    issuesTable.treetable('expandNode', element);
-  });
+  if(defaultState === "categories"){
+    categories.forEach(function(element,index) {
+      issuesTable.treetable('expandNode', element);
+    });
+  }
 
   var expandAllButton = $("<a class=\"icon icon-arrow-down expand-all-button\">Expand all</a>").css("cursor","pointer").on('click',expandIssues);
   $("#query_form_with_buttons p.buttons").append(expandAllButton);
@@ -236,64 +261,71 @@ function rebuildDoneRatio(issue){
     var css = $doneRatio.attr('class');
     var doneRatio = css.substring(css.indexOf("-")+1,css.length);
 
-    issue.find("td.done_ratio").editable({
-      type: 'range',
-      value: doneRatio,
-      title: 'Enter done %',
-      tpl: '<input type="range" min="0" max="100" step="10" /><output></output>',
-      display: function(value, sourceData) {
-        $(this).html('<progress max="100" value="'+value+'"></progress>');
-      },
-      url: function(params) {
-        var issueId = issue.data('tt-id');
-        var deferred = $.ajax({
-          method: "PUT",
-          url: "https://projects.visiativ.com/issues/"+issueId+".json",
-          headers: {
-            'X-Redmine-API-Key': redmineAPIKey
-          },
-          contentType: "application/json; charset=utf-8",
-          dataType: 'text',
-          data: JSON.stringify({
-            "issue": {
-              "done_ratio": params.value
-            }
-          })
-        });
-        return deferred;
-      }
-    });
+    if(enableInlineEdit){
+      issue.find("td.done_ratio").editable({
+        type: 'range',
+        value: doneRatio,
+        title: 'Enter done %',
+        tpl: '<input type="range" min="0" max="100" step="10" /><output></output>',
+        display: function(value, sourceData) {
+          $(this).html('<progress max="100" value="'+value+'"></progress>');
+        },
+        url: function(params) {
+          var issueId = issue.data('tt-id');
+          var deferred = $.ajax({
+            method: "PUT",
+            url: "https://projects.visiativ.com/issues/"+issueId+".json",
+            headers: {
+              'X-Redmine-API-Key': redmineAPIKey
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: 'text',
+            data: JSON.stringify({
+              "issue": {
+                "done_ratio": params.value
+              }
+            })
+          });
+          return deferred;
+        }
+      });
+    }else{
+      $doneRatio.html('<progress max="100" value="'+doneRatio+'"></progress>');
+    }
+
   });
 }
 
 function rebuildWorkload(issue){
-  async(function(){
-    issue.find("td.cf_28").editable({
-      type: 'text',
-      emptytext: '-',
-      title: 'Enter workload in points',
-      url: function(params) {
-        var issueId = issue.data('tt-id');
-        var deferred = $.ajax({
-          method: "PUT",
-          url: "https://projects.visiativ.com/issues/"+issueId+".json",
-          headers: {
-            'X-Redmine-API-Key': redmineAPIKey
-          },
-          contentType: "application/json; charset=utf-8",
-          dataType: 'text',
-          data: JSON.stringify({
-            "issue": {
-              "custom_fields": [
-                {"id": 28, "value": params.value }
-              ]
-            }
-          })
-        });
-        return deferred;
-      }
+  if(enableInlineEdit){
+    async(function(){
+      issue.find("td.cf_28").editable({
+        type: 'text',
+        emptytext: '-',
+        title: 'Enter workload in points',
+        url: function(params) {
+          var issueId = issue.data('tt-id');
+          var deferred = $.ajax({
+            method: "PUT",
+            url: "https://projects.visiativ.com/issues/"+issueId+".json",
+            headers: {
+              'X-Redmine-API-Key': redmineAPIKey
+            },
+            contentType: "application/json; charset=utf-8",
+            dataType: 'text',
+            data: JSON.stringify({
+              "issue": {
+                "custom_fields": [
+                  {"id": 28, "value": params.value }
+                ]
+              }
+            })
+          });
+          return deferred;
+        }
+      });
     });
-  });
+  }
 }
 
 function rebuildAssignedTo(issue){
@@ -309,41 +341,43 @@ function rebuildAssignedTo(issue){
       username = $a.html();
     }
     project.getMembers().done(function(members){
-      $assignedTo.editable({
-        type: 'select',
-        value: userid,
-        emptytext: '-',
-        title: 'Assigned to',
-        display: function(value, sourceData, response) {
-          $(members).each(function(index, member){
-            if(member.value == value)
-            {
-              $assignedTo.html(member.text);
-              return false;
-            }
-          });
-
-        },
-        source: members,
-        url: function(params) {
-          var issueId = issue.data('tt-id');
-          var deferred = $.ajax({
-            method: "PUT",
-            url: "https://projects.visiativ.com/issues/"+issueId+".json",
-            headers: {
-              'X-Redmine-API-Key': redmineAPIKey
-            },
-            contentType: "application/json; charset=utf-8",
-            dataType: 'text',
-            data: JSON.stringify({
-              "issue": {
-                "assigned_to_id":  params.value
+      if(enableInlineEdit){
+        $assignedTo.editable({
+          type: 'select',
+          value: userid,
+          emptytext: '-',
+          title: 'Assigned to',
+          display: function(value, sourceData, response) {
+            $(members).each(function(index, member){
+              if(member.value == value)
+              {
+                $assignedTo.html(member.text);
+                return false;
               }
-            })
-          });
-          return deferred;
-        }
-      });
+            });
+
+          },
+          source: members,
+          url: function(params) {
+            var issueId = issue.data('tt-id');
+            var deferred = $.ajax({
+              method: "PUT",
+              url: "https://projects.visiativ.com/issues/"+issueId+".json",
+              headers: {
+                'X-Redmine-API-Key': redmineAPIKey
+              },
+              contentType: "application/json; charset=utf-8",
+              dataType: 'text',
+              data: JSON.stringify({
+                "issue": {
+                  "assigned_to_id":  params.value
+                }
+              })
+            });
+            return deferred;
+          }
+        });
+      }
     });
   });
 }
@@ -400,11 +434,15 @@ function collapseIssues(){
 $( document ).ready(function() {
   console.info( "Redmine tools started!" );
   getStorage({
-    redmineAPIKey: null
+    redmineAPIKey: null,
+	enableInlineEdit: true,
+    defaultState: "categories"
   }, function(configuration) {
     console.info( "Configuration loaded : " );
     console.debug( configuration );
     redmineAPIKey = configuration.redmineAPIKey;
+    enableInlineEdit = configuration.enableInlineEdit;
+    defaultState = configuration.defaultState;
     // get the base url
     if (!location.origin) {
       location.origin = location.protocol + "//" + location.host;
@@ -426,9 +464,21 @@ $( document ).ready(function() {
     setupTreeTable();
 
     countWorkload();
+
+    $(".sidebar_closer").bind("cick.polisher", function(){
+      $("tr.issue td.subject").each(function(index, subject){
+        var subject = $(subject);
+        autoSizeSubject(subject);
+      });
+    });
   });
 });
 
+var onNodeExpand = function(){
+  this.children.forEach(function($element){
+    autoSizeSubject($element.row.find("td.subject"));
+  })
+}
 
 class Project {
 
@@ -466,8 +516,8 @@ class Project {
 }
 
 function async(your_function, callback) {
-    setTimeout(function() {
-        your_function();
-        if (callback) {callback();}
-    }, 0);
+  setTimeout(function() {
+    your_function();
+    if (callback) {callback();}
+  }, 0);
 }
