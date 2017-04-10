@@ -161,7 +161,7 @@ function autoSizeSubject($subject){
   if(initialWidth <= 0){
     return; // it's an hidden element
   }
-  $subject.find("a").css("max-width", initialWidth - 75).css({
+  $subject.find("a").css("max-width", initialWidth - 100).css({
     'display':'inline-block',
     'white-space':'nowrap',
     'overflow':'hidden',

@@ -75,9 +75,17 @@
         ]
       }
     ],
+    "background": {
+        "scripts": [
+            "query-pager.js"
+        ]
+     },
     "permissions": [
       "webNavigation",
-      "storage"
+      "storage",
+      "webRequest",
+      "webRequestBlocking",
+      "https://projects.visiativ.com/*/issues*"
     ],
     "web_accessible_resources": [
       "images/*",
