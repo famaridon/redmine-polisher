@@ -3,8 +3,8 @@
 
   "name": "Visiativ Redmine polisher",
   "description": "This extension polish redmine ui",
-  "version": "1.2.18",
-  "version_name": "1.2.18",
+  "version": "1.2.19",
+  "version_name": "1.2.19",
   "options_page": "options.html",
   "browser_action": {
     "default_icon": "icon.png"
@@ -75,9 +75,17 @@
         ]
       }
     ],
+    "background": {
+        "scripts": [
+            "query-pager.js"
+        ]
+     },
     "permissions": [
       "webNavigation",
-      "storage"
+      "storage",
+      "webRequest",
+      "webRequestBlocking",
+      "https://projects.visiativ.com/*/issues*"
     ],
     "web_accessible_resources": [
       "images/*",
