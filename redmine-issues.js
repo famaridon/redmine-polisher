@@ -74,60 +74,61 @@ function rebuildIssue(issue){
             },
             success : function(data){
               var value = data.issue
-              if(statusFilter === "=" && selectedStatus.indexOf(value.status.id) > 0){
-                var $issueTR = $("<tr></tr>");
-                $issueTR.attr("id","issue-" + value.id);
-                $issueTR.addClass("hascontextmenu issue")
-                .addClass("tracker-"+value.tracker.id)
-                .addClass("status-"+value.status.id)
-                .addClass("priority-"+value.priority.id)
-                .addClass("child")
-                .addClass("odd")
-                .attr("data-redmine-polisher-isajax","true");
-
-                $issueTR.append('<td class="checkbox hide-when-print"><input type="checkbox" name="ids[]" value="'+value.id+'"></td>')
-                $issueTR.append('<td class="id"><a href="/issues/'+value.id+'">'+value.id+'</a></td>');
-                $issueTR.append('<td class="tracker">'+value.tracker.name+'</td>');
-                $issueTR.append('<td class="subject"><a href="/issues/'+value.id+'">'+value.subject+'</a></td>');
-                $issueTR.append('<td class="status">'+value.status.name+'</td>');
-                $issueTR.append('<td class="priority">'+value.priority.name+'</td>');
-                $issueTR.attr("data-redmine-polisher-priority",value.priority.id);
-
-                var $assigned_to = $('<td class="assigned_to"></td>');
-                if(typeof value.assigned_to != 'undefined'){
-                  $assigned_to.append($('<a class="user active" href="/users/'+value.assigned_to.id+'">'+value.assigned_to.name+'</a>'));
-                }
-                $issueTR.append($assigned_to);
-                $issueTR.append('<td class="done_ratio"><progress max="100" value="'+value.done_ratio+'"></progress></td>');
-                $issueTR.append('<td class="parent"></td>');
-
-                var $workload = $('<td class="cf_28 int">-</td>');
-                if(typeof value.custom_fields != 'undefined'){
-                  var workload = $.grep(value.custom_fields, function(e){ return e.id == 28; })[0];
-                  if(typeof workload != 'undefined'){
-                    $workload.text(workload.value);
-                  }
-                }
-                $issueTR.append($workload);
-                $issueTR.append('<td class="category">VDoc-Dev</td>');
-
-                rebuildIssue($issueTR);
-                $issueTR.attr("data-tt-id",value.id);
-                $issueTR.attr("data-tt-parent-id",issue.attr('data-tt-id'));
-
-                var ttnode = $(issuesTable).treetable("node", issue.attr('data-tt-id'));
-                $(issuesTable).treetable("loadBranch", ttnode, $issueTR);
-                if(defaultState !== "expanded"){
-                  $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
-                }
-                $(issuesTable).treetable("sortBranch", ttnode, function(a,b){
-                  var valA = a.row.attr("data-redmine-polisher-priority");
-                  var valB = b.row.attr("data-redmine-polisher-priority");
-                  if (valA < valB) return 1;
-                  if (valA > valB) return -1;
-                  return 0;
-                });
+              if((statusFilter === "=" && selectedStatus.indexOf(value.status.id) < 0) || (statusFilter === "!" && selectedStatus.indexOf(value.status.id) > 0) ){
+                return 0;
               }
+              var $issueTR = $("<tr></tr>");
+              $issueTR.attr("id","issue-" + value.id);
+              $issueTR.addClass("hascontextmenu issue")
+              .addClass("tracker-"+value.tracker.id)
+              .addClass("status-"+value.status.id)
+              .addClass("priority-"+value.priority.id)
+              .addClass("child")
+              .addClass("odd")
+              .attr("data-redmine-polisher-isajax","true");
+
+              $issueTR.append('<td class="checkbox hide-when-print"><input type="checkbox" name="ids[]" value="'+value.id+'"></td>')
+              $issueTR.append('<td class="id"><a href="/issues/'+value.id+'">'+value.id+'</a></td>');
+              $issueTR.append('<td class="tracker">'+value.tracker.name+'</td>');
+              $issueTR.append('<td class="subject"><a href="/issues/'+value.id+'">'+value.subject+'</a></td>');
+              $issueTR.append('<td class="status">'+value.status.name+'</td>');
+              $issueTR.append('<td class="priority">'+value.priority.name+'</td>');
+              $issueTR.attr("data-redmine-polisher-priority",value.priority.id);
+
+              var $assigned_to = $('<td class="assigned_to"></td>');
+              if(typeof value.assigned_to != 'undefined'){
+                $assigned_to.append($('<a class="user active" href="/users/'+value.assigned_to.id+'">'+value.assigned_to.name+'</a>'));
+              }
+              $issueTR.append($assigned_to);
+              $issueTR.append('<td class="done_ratio"><progress max="100" value="'+value.done_ratio+'"></progress></td>');
+              $issueTR.append('<td class="parent"></td>');
+
+              var $workload = $('<td class="cf_28 int">-</td>');
+              if(typeof value.custom_fields != 'undefined'){
+                var workload = $.grep(value.custom_fields, function(e){ return e.id == 28; })[0];
+                if(typeof workload != 'undefined'){
+                  $workload.text(workload.value);
+                }
+              }
+              $issueTR.append($workload);
+              $issueTR.append('<td class="category">VDoc-Dev</td>');
+
+              rebuildIssue($issueTR);
+              $issueTR.attr("data-tt-id",value.id);
+              $issueTR.attr("data-tt-parent-id",issue.attr('data-tt-id'));
+
+              var ttnode = $(issuesTable).treetable("node", issue.attr('data-tt-id'));
+              $(issuesTable).treetable("loadBranch", ttnode, $issueTR);
+              if(defaultState !== "expanded"){
+                $(issuesTable).treetable("collapseNode", issue.attr('data-tt-id'));
+              }
+              $(issuesTable).treetable("sortBranch", ttnode, function(a,b){
+                var valA = a.row.attr("data-redmine-polisher-priority");
+                var valB = b.row.attr("data-redmine-polisher-priority");
+                if (valA < valB) return 1;
+                if (valA > valB) return -1;
+                return 0;
+              });
             }
           });
         });
