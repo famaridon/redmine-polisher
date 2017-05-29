@@ -5,6 +5,8 @@ var defaultState = "categories";
 var project = null;
 var haveCategory = null;
 var categories = new Set();
+var statusFilter;
+var selectedStatus = new Array();
 
 function rebuildIssuesTable(){
 
@@ -72,6 +74,9 @@ function rebuildIssue(issue){
             },
             success : function(data){
               var value = data.issue
+              if((statusFilter === "=" && selectedStatus.indexOf(value.status.id) < 0) || (statusFilter === "!" && selectedStatus.indexOf(value.status.id) > 0) ){
+                return 0;
+              }
               var $issueTR = $("<tr></tr>");
               $issueTR.attr("id","issue-" + value.id);
               $issueTR.addClass("hascontextmenu issue")
@@ -431,6 +436,15 @@ function collapseIssues(){
   issuesTable.treetable('collapseAll');
 }
 
+function storeStatusFilter(){
+  statusFilter = $("#filters-table #tr_status_id .operator option:selected").val();
+  if(statusFilter === "=" || statusFilter === "!"){
+    $("#filters-table #tr_status_id .values option:selected").each(function(index, elem){
+      selectedStatus.push(parseInt($(elem).val()));
+    });
+  }
+}
+
 $( document ).ready(function() {
   console.info( "Redmine tools started!" );
   chrome.storage.sync.get({
@@ -455,6 +469,9 @@ $( document ).ready(function() {
 
     // setup all default plugin configuration
     $.fn.editableContainer.defaults.className = "tip-default";
+
+    console.info( "Store status filter" );
+    storeStatusFilter();
 
     console.info( "Start rebuilding the DOM" );
     rebuildIssuesTable();
