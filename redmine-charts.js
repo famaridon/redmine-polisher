@@ -45,9 +45,8 @@ $( document ).ready(function() {
     let x = 0;
     for(var i=0; i <= iteration_days; i++){
       let loop_date = start_date.clone().add(i, 'd');
-      console.log(`loop day ${loop_date.day()}`)
       let point;
-      if(i !== 0 && (loop_date.day() === 6 || loop_date.day() === 0)){
+      if(i !== 0 && (loop_date.day() === 1 || loop_date.day() === 0)){
         point = {x: loop_date.toDate(), y: ideal_data[ideal_data.length-1].y};
       } else {
         point = {x: loop_date.toDate(), y: a * x++ + start_point};
