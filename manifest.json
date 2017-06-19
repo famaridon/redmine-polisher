@@ -77,6 +77,9 @@
         "matches": [
           "https://projects.visiativ.com/projects/moovapps-process-team/agile/charts*"
         ],
+        "css": [
+          "redmine-charts.css"
+        ],
         "js": [
           "js/jquery-3.1.1.js",
           "js/moment.js",
