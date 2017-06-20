@@ -4,7 +4,11 @@ $( document ).ready(function() {
   var timeFormat = 'MM/DD/YYYY HH:mm';
 
   $("#content").empty();
-  $("#content").append(`<canvas id="canvas"></canvas>`);
+  $("#content").append(`<div id="current-it" class="iteration" ></div>`);
+  $("#current-it").append(`<canvas id="canvas"></canvas>`);
+
+  $("#content").append(`<div id="next-it" class="iteration"></div>`);
+  $("#next-it").append(`<div id="UserStoryWithBusinessValue"><h3>User story with business value</h3><div class="value percentage"></div></div>`);
   var ctx = document.getElementById("canvas");
 
   let redmine_data_Deferred = $.ajax({
@@ -14,6 +18,20 @@ $( document ).ready(function() {
   let latest_version_Deferred = $.ajax({
     url: "https://redminecharts.famaridon.com/api/charts/latest",
   });
+
+  $.ajax({
+    url: "https://redminecharts.famaridon.com/api/indicator/UserStoryWithBusinessValue",
+  })
+  .done((data) => {
+    let $value = $("#UserStoryWithBusinessValue .value").text(Math.round(data.percentage));
+    if(data.percentage < 33) {
+      $value.addClass("error");
+    } else if(data.percentage > 66) {
+      $value.addClass("ok");
+    } else {
+      $value.addClass("warrning");
+    }
+  } );
 
   $.when(redmine_data_Deferred, latest_version_Deferred).done(function( redmine_data_Deferred_result, latest_version_Deferred_result ) {
 
@@ -60,12 +78,14 @@ $( document ).ready(function() {
         lineTension: 0,
         data: chartjs_data ,
         borderColor: "#36A2EB",
+        pointRadius: 0,
         fill: true
       },{
         label: "Ideal",
         borderColor: '#FF6384',
         borderDash: [5, 5],
         data: ideal_data,
+        lineTension: 0,
         fill: false
       }]
     };
