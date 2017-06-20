@@ -1,0 +1,32 @@
+#current-it:before{
+  content: 'Current iteration';
+}
+
+#next-it:before{
+  content: 'Next iteration';
+}
+
+.iteration{
+  font-size: 18px;
+  color: gray;
+  padding-top: 10px;
+  margin-top: 15px;
+}
+
+.value {
+  font-size: 28px;
+  text-align: center;
+}
+.value.ok{
+  color: green;
+}
+.value.warrning{
+  color: orange;
+}
+.value.error{
+  color: red;
+}
+
+.percentage:after {
+  content: ' %';
+}
