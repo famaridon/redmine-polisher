@@ -177,8 +177,8 @@ async function initNextIteration(configuration){
   }).done((chartjs_data => {
     $("#next-it").append('<canvas id="prioritization"></canvas>');
 
-    var ctx = document.getElementById("prioritization");
-    var data = {
+    let ctx = document.getElementById("prioritization");
+    let data = {
       datasets: [{
         label: "Real",
         data: chartjs_data ,
@@ -186,10 +186,29 @@ async function initNextIteration(configuration){
       }]
     };
 
+    let options = {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    max: 100,
+                    min: 0,
+                    stepSize: 10
+                }
+            }],
+            xAxes: [{
+                ticks: {
+                    max: 100,
+                    min: 0,
+                    stepSize: 10
+                }
+            }]
+        }
+    };
+
     var myBubbleChart = new Chart(ctx,{
       type: 'bubble',
       data: data,
-      options: {}
+      options: options
     });
   }));
 
