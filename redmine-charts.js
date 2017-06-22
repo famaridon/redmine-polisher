@@ -80,6 +80,10 @@ async function initCurrentIteration(configuration){
       ideal_data.push(point);
     }
 
+    let average_data = [];
+    average_data.push(chartjs_data[0]);
+    average_data.push(chartjs_data[chartjs_data.length-1]);
+
     var data = {
       datasets: [{
         label: "Real",
@@ -94,6 +98,12 @@ async function initCurrentIteration(configuration){
         borderDash: [5, 5],
         data: ideal_data,
         lineTension: 0,
+        fill: false
+      },{
+        label: "Average",
+        borderColor: '#FF69B4',
+        borderDash: [10, 5],
+        data: average_data,
         fill: false
       }]
     };
@@ -148,28 +158,18 @@ async function initNextIteration(configuration){
     url: "https://redminecharts.famaridon.com/api/indicator/UserStoryWithBusinessValue",
   }).done((data) => {
     $("#next-it").append('<div id="UserStoryWithBusinessValue" class="card"> <div class="card-block"><h4 class="card-title">User story with business value</h4> <p class="card-text"> <span class="value percentage"></span> </p></div></div>');
-    let $value = $("#UserStoryWithBusinessValue .value").text(Math.round(data.percentage));
-    if(data.percentage < 33) {
-      $value.addClass("error");
-    } else if(data.percentage > 66) {
-      $value.addClass("ok");
-    } else {
-      $value.addClass("warrning");
-    }
+    let $value = $("#UserStoryWithBusinessValue .value");
+    $value.text(Math.round(data.percentage));
+    $value.css("color",`hsl(${data.percentage}, 77%, 50%)`);
   } );
 
   $.ajax({
     url: "https://redminecharts.famaridon.com/api/indicator/UserStoryWithPoints",
   }).done((data) => {
     $("#next-it").append('<div id="UserStoryWithPoints" class="card"> <div class="card-block"><h4 class="card-title">User story with Points</h4> <p class="card-text"><span class="value percentage"></span></p></div></div>');
-    let $value = $("#UserStoryWithPoints .value").text(Math.round(data.percentage));
-    if(data.percentage < 33) {
-      $value.addClass("error");
-    } else if(data.percentage > 66) {
-      $value.addClass("ok");
-    } else {
-      $value.addClass("warrning");
-    }
+    let $value = $("#UserStoryWithPoints .value")
+    $value.text(Math.round(data.percentage));
+    $value.css("color",`hsl(${data.percentage}, 77%, 50%)`);
   } );
 
   $.ajax({
@@ -198,8 +198,7 @@ async function initNextIteration(configuration){
             xAxes: [{
                 ticks: {
                     max: 100,
-                    min: 0,
-                    stepSize: 10
+                    min: 0
                 }
             }]
         }
