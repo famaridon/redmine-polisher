@@ -63,11 +63,11 @@ async function initCurrentIteration(configuration){
       url: "https://redminecharts.famaridon.com/api/charts/current",
     });
 
-    $.when(redmine_data_Deferred, current_version_Deferred).done(function( redmine_data_Deferred_result, current_version_Deferred_result ) {
+    $.when(redmine_data_Deferred, current_version_Deferred).done(( redmine_data_Deferred_result, current_version_Deferred_result ) => {
 
       $zone.append(`<canvas id="burndown"></canvas>`);
       var ctx = document.getElementById("burndown");
-      
+
       let redmine_data= redmine_data_Deferred_result[0];
       let current_version= current_version_Deferred_result[0];
 
