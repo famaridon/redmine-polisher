@@ -32,15 +32,9 @@
           "js/poshytip/tip-default/tip-default.css"
         ],
         "js": [
-          "js/jquery-3.1.1.js",
-          "js/jquery.treetable.js",
-          "redmine-tooltips.js",
-          "redmine-issues.js",
-          "js/tooltipster/js/tooltipster.bundle.js",
-          "js/textile/textile.js",
-          "js/poshytip/jquery.poshytip.js",
-          "js/jquery-editable/js/jquery-editable-poshytip.js"
-        ]
+          "redmine-issues.js"
+        ],
+        "run_at": "document_start"
       },
       {
         "matches": [
@@ -91,11 +85,13 @@
     ],
     "background": {
         "scripts": [
-            "query-pager.js"
+            "query-pager.js",
+            "event-page.js"
         ]
      },
     "permissions": [
       "webNavigation",
+      "tabs",
       "storage",
       "webRequest",
       "webRequestBlocking",
