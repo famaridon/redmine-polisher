@@ -1,3 +1,6 @@
+/**
+ * chrome extension event dispatcher
+**/
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(sender.tab ? "from a content script:" + sender.tab.url : "from the extension");
   if (request.event == "loadAngular"){
@@ -5,6 +8,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+/**
+ * load angular apps js files
+**/
 function loadAngular(request, sender, sendResponse){
   let files = [
     "inline.bundle.js",
