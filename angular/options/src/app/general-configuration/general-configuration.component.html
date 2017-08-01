@@ -1,0 +1,11 @@
+<md-card>
+  <md-card-content>
+    <md-input-container>
+      <input mdInput placeholder="Redmine API Key" [(ngModel)]="redmineAPIKey" name="redmineAPIKey">
+    </md-input-container>
+  </md-card-content>
+  <md-card-actions>
+    <button md-fab (click)="submit()" type="button" ><md-icon>check</md-icon></button>
+    <button md-fab color="warn" (click)="reset()" type="button"><md-icon>close</md-icon></button>
+  </md-card-actions>
+</md-card>
