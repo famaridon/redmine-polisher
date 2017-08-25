@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'app';
+export class AppComponent implements OnInit {
+  @ViewChild('sidenav') sidenav:ElementRef;
+
+  constructor(){}
+
+  ngOnInit() {
+    
+  }
 }
