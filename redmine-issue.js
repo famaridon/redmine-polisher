@@ -1,3 +1,20 @@
+MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+var observer = new MutationObserver(function(mutations, observer) {
+    if($("#issue_status_id").val() === "24" || $("#issue_status_id").val() === "6"){ // A valider
+      console.info( "Auto update donne ratio" );
+      $("#issue_done_ratio").val("100");
+    } else if($("#issue_status_id").val() === "9" ){ // Réouvert
+      console.info( "Auto update donne ratio" );
+      $("#issue_done_ratio").val("0");
+    }
+});
+
+observer.observe(document.getElementById("all_attributes"), {
+  subtree: true,
+  attributes: true
+});
+
 $( document ).ready(function() {
   console.info( "Redmine tools started!" );
 
@@ -41,7 +58,6 @@ $( document ).ready(function() {
       issue.attr('data-tt-id', issue.find("a.issue").attr('href').split('/')[2]);
       tooltips.setupTooltips(issue.find(".subject a"));
     });
-
   });
 });
 
