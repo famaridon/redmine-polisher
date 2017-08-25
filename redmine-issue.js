@@ -1,9 +1,12 @@
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
 var observer = new MutationObserver(function(mutations, observer) {
-    if($("#issue_status_id").val() === "24" ){
+    if($("#issue_status_id").val() === "24" || $("#issue_status_id").val() === "6"){ // A valider
       console.info( "Auto update donne ratio" );
       $("#issue_done_ratio").val("100");
+    } else if($("#issue_status_id").val() === "9" ){ // Réouvert
+      console.info( "Auto update donne ratio" );
+      $("#issue_done_ratio").val("0");
     }
 });
 
