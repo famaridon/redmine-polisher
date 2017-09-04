@@ -25,6 +25,9 @@
         "matches": [
           "https://projects.visiativ.com/*/issues*"
         ],
+        "exclude_matches": [
+          "https://projects.visiativ.com/*/issues/new*"
+        ],
         "css": [
           "redmine-issues.css",
           "redmine-tooltips.css",
@@ -59,7 +62,8 @@
       },
       {
         "matches": [
-          "https://projects.visiativ.com/issues/*"
+          "https://projects.visiativ.com/issues/*",
+          "https://projects.visiativ.com/*/issues/new*"
         ],
         "css": [
           "redmine-issue.css",

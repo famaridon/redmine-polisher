@@ -1,5 +1,4 @@
 $(document).ready(() => {
-  console.log("azertyuiop");
   let newDefect = $(`<li>
       <a class="new-issue" href="/projects/moovapps-process-team/issues/new?issue[tracker_id]=37">New defect</a>
     </li>`);

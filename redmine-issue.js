@@ -17,6 +17,14 @@ observer.observe(document.getElementById("all_attributes"), {
 $( document ).ready(function() {
   console.info( "Redmine tools started!" );
 
+  // add a new button to create and duplicate issue
+  let dupliacte = $(`<input type="button" name="duplicate" value="Create and duplicate">`);
+  $("input[name='continue']" ).after(dupliacte);
+  $(dupliacte).bind("click", () => {
+
+  });
+
+
   // build better title
   var subject = new Subject($("div.subject"));
 
