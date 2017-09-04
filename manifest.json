@@ -16,6 +16,10 @@
       ],
       "css": [
         "redmine-global.css"
+      ],
+      "js": [
+        "js/jquery-3.1.1.js",
+        "redmine-global.js"
       ]
       },{
         "matches": [
@@ -31,7 +35,6 @@
           "js/poshytip/tip-default/tip-default.css"
         ],
         "js": [
-          "js/jquery-3.1.1.js",
           "js/jquery.treetable.js",
           "redmine-tooltips.js",
           "redmine-issues.js",
@@ -50,7 +53,6 @@
           "js/jstree/themes/default/style.css"
         ],
         "js": [
-          "js/jquery-3.1.1.js",
           "js/jstree/jstree.js",
           "redmine-projects.js"
         ]
@@ -67,7 +69,6 @@
           "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css"
         ],
         "js": [
-          "js/jquery-3.1.1.js",
           "js/textile/textile.js",
           "js/tooltipster/js/tooltipster.bundle.js",
           "redmine-tooltips.js",
@@ -81,7 +82,6 @@
           "redmine-charts.css"
         ],
         "js": [
-          "js/jquery-3.1.1.js",
           "js/moment.js",
           "js/Chart.js",
           "redmine-charts.js"
