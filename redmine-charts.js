@@ -105,10 +105,6 @@ async function initCurrentIteration(configuration){
         ideal_data.push(point);
       }
 
-      let average_data = [];
-      average_data.push(chartjs_data[0]);
-      average_data.push(chartjs_data[chartjs_data.length-1]);
-
       var data = {
         datasets: [{
           label: "Real",
@@ -123,12 +119,6 @@ async function initCurrentIteration(configuration){
           borderDash: [5, 5],
           data: ideal_data,
           lineTension: 0,
-          fill: false
-        },{
-          label: "Average",
-          borderColor: '#FF69B4',
-          borderDash: [10, 5],
-          data: average_data,
           fill: false
         }]
       };
@@ -160,7 +150,7 @@ async function initCurrentIteration(configuration){
           yAxes: [{
             ticks: {
               min: 0,
-              stepSize: 1
+              stepSize: 10
             }
           }]
         }
