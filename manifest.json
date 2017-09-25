@@ -9,8 +9,8 @@
 	  "id": "redmine-polisher@visiativ.com"
     }
   },
-  "version": "1.3.1",
-  "version_name": "1.3.1",
+  "version": "1.4.1",
+  "version_name": "1.4.1",
   "options_page": "options.html",
   "options_ui": {"page" : "options.html"},
   "author": "visiativ",
@@ -24,6 +24,10 @@
       ],
       "css": [
         "redmine-global.css"
+      ],
+      "js": [
+        "js/jquery-3.1.1.js",
+        "redmine-global.js"
       ]
       },{
         "matches": [
@@ -59,7 +63,6 @@
           "js/jstree/themes/default/style.css"
         ],
         "js": [
-          "js/jquery-3.1.1.js",
           "js/jstree/jstree.js",
           "redmine-projects.js"
         ]
@@ -91,7 +94,6 @@
           "redmine-charts.css"
         ],
         "js": [
-          "js/jquery-3.1.1.js",
           "js/moment.js",
           "js/Chart.js",
           "redmine-charts.js"
