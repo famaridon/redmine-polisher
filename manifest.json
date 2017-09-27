@@ -15,11 +15,13 @@
         "https://projects.visiativ.com/*"
       ],
       "css": [
-        "redmine-global.css"
+        "redmine-global.css",
+        "js/speech-input/speech-input.css"
       ],
       "js": [
         "js/jquery-3.1.1.js",
-        "redmine-global.js"
+        "redmine-global.js",
+        "js/speech-input/speech-input.js"
       ]
       },{
         "matches": [

@@ -1,12 +1,12 @@
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
 var observer = new MutationObserver(function(mutations, observer) {
-    if($("#issue_status_id").val() === "24" || $("#issue_status_id").val() === "6"){ // A valider
-      $("#issue_done_ratio").val("100");
-    } else if($("#issue_status_id").val() === "9" ){ // Réouvert
-      $("#issue_done_ratio").val("0");
-      $("#issue_assigned_to_id").val("");
-    }
+  if($("#issue_status_id").val() === "24" || $("#issue_status_id").val() === "6"){ // A valider
+    $("#issue_done_ratio").val("100");
+  } else if($("#issue_status_id").val() === "9" ){ // Réouvert
+    $("#issue_done_ratio").val("0");
+    $("#issue_assigned_to_id").val("");
+  }
 });
 
 observer.observe(document.getElementById("all_attributes"), {
@@ -37,7 +37,7 @@ $( document ).ready(function() {
   $(".list.issues tr.issue").each(function(index,item){
     var link = $(item).find("td.subject a");
     link.append(link[0].nextSibling.nodeValue);
-     $(item).find("td.subject").html(link);
+    $(item).find("td.subject").html(link);
   });
   chrome.storage.sync.get({
     redmineAPIKey: null
@@ -57,8 +57,69 @@ $( document ).ready(function() {
       issue.attr('data-tt-id', issue.find("a.issue").attr('href').split('/')[2]);
       tooltips.setupTooltips(issue.find(".subject a"));
     });
+
+    $("#issue_subject").speechInput();
+    $("textarea").speechInput();
   });
 });
+
+function addSpeechToText(configuration, $input){
+  if (!('webkitSpeechRecognition' in window)) {
+    console.log("Speech recognition not available!");
+  } else {
+    console.debug(`Add speech recognition to input ${$input}!`);
+    let $sttButton = $(`<button type="button">STT</button>`);
+    $sttButton.insertBefore($input);
+    $sttButton.on("click.redmine_poisher", () => {
+      startSpeechToText(event, configuration, $input, $sttButton);
+    });
+  }
+}
+
+function startSpeechToText(event, configuration, $input, $sttButton){
+  $sttButton.off("click.redmine_poisher");
+  let recognition = new webkitSpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "fr-FR";
+  recognition.start();
+  recognition.onstart = function(event) {
+    console.log(`onstart`);
+    console.dir(event);
+  }
+  recognition.onresult = function(event) {
+    console.log(`onresult`);
+    console.dir(event);
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      $input.val($input.val() + event.results[0][0].transcript);
+    }
+
+  };
+  recognition.onerror = function(event) {
+    console.log(`onerror`);
+    console.dir(event);
+    stopSpeechToText(event, configuration, $input, $sttButton);
+  }
+  recognition.onend = function(event) {
+    console.log(`onend`);
+    console.dir(event);
+  }
+  $sttButton.on("click.redmine_poisher", () => {
+    recognition.stop();
+    stopSpeechToText(event, configuration, $input, $sttButton);
+  })
+}
+
+function stopSpeechToText(event, configuration, $input, $sttButton, recognition) {
+  $sttButton.off("click.redmine_poisher");
+  $sttButton.on("click.redmine_poisher", () => {
+    startSpeechToText(event, configuration, $input, $sttButton);
+  });
+}
+
+function speechToTextOnResult(event, $input){
+
+}
 
 class Subject{
   constructor($subject) {
@@ -76,10 +137,10 @@ class Subject{
   toBreadcrumbs(){
     var breadcrumbs = $('<ol class="breadcrumb"></ol>');
     if(this.parents != null){
-        $.each( this.parents.$parents, function( index, parent ){
-          breadcrumbs.append('<li><a title="'+parent.parentId+'" href="'+parent.parentUrl+'">'+parent.parentTitle+'</a></li>');
-        });
-      }
+      $.each( this.parents.$parents, function( index, parent ){
+        breadcrumbs.append('<li><a title="'+parent.parentId+'" href="'+parent.parentUrl+'">'+parent.parentTitle+'</a></li>');
+      });
+    }
     breadcrumbs.append('<li>'+this.title+'</li>');
     return breadcrumbs;
   }
