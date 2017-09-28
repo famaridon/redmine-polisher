@@ -25,6 +25,10 @@
   background-color: white;
 }
 
+#issue_custom_field_values_29, label[for='issue_custom_field_values_29'] + .si-wrapper {
+  width: 100%;
+}
+
 div.issue{
   background-color: #fafafa !important;
 }

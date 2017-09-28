@@ -9,8 +9,8 @@
 	  "id": "redmine-polisher@visiativ.com"
     }
   },
-  "version": "1.4.1",
-  "version_name": "1.4.1",
+  "version": "1.5.0",
+  "version_name": "1.5.0",
   "options_page": "options.html",
   "options_ui": {"page" : "options.html"},
   "author": "visiativ",
@@ -23,15 +23,20 @@
         "https://projects.visiativ.com/*"
       ],
       "css": [
-        "redmine-global.css"
+        "redmine-global.css",
+        "js/speech-input/speech-input.css"
       ],
       "js": [
         "js/jquery-3.1.1.js",
-        "redmine-global.js"
+        "redmine-global.js",
+        "js/speech-input/speech-input.js"
       ]
       },{
         "matches": [
           "https://projects.visiativ.com/*/issues*"
+        ],
+        "exclude_matches": [
+            "https://projects.visiativ.com/*/issues/new*"
         ],
         "css": [
           "redmine-issues.css",
@@ -69,7 +74,8 @@
       },
       {
         "matches": [
-          "https://projects.visiativ.com/issues/*"
+          "https://projects.visiativ.com/issues/*",
+          "https://projects.visiativ.com/*/issues/new*"
         ],
         "css": [
           "redmine-issue.css",
