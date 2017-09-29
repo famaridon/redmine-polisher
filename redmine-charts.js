@@ -53,20 +53,25 @@ async function initCurrentIteration(configuration){
   let $zone = $(`<div id="current-it" class="iteration zone" ></div>`);
   $("#main").append($zone);
   addMenuItem("Burndown",$zone, false, () => {
+    loadBurndownCharts(configuration, $zone);
+  });
+}
 
+/**
+* create chart with ideal datasets and global burndown
+**/
+async function createBurndownCharts(configuration, $zone) {
+  return new Promise((resolve, reject) => {
+    $zone.append(`<canvas id="burndown"></canvas>`);
+    var ctx = document.getElementById("burndown");
     // current iteration
     let redmine_data_Deferred = $.ajax({
       url: "https://redminecharts.famaridon.com/api/charts/current/burndown",
     });
-
     let current_version_Deferred = $.ajax({
       url: "https://redminecharts.famaridon.com/api/charts/current",
     });
-
-    $.when(redmine_data_Deferred, current_version_Deferred).done(( redmine_data_Deferred_result, current_version_Deferred_result ) => {
-
-      $zone.append(`<canvas id="burndown"></canvas>`);
-      var ctx = document.getElementById("burndown");
+    $.when(current_version_Deferred, redmine_data_Deferred).done((current_version_Deferred_result, redmine_data_Deferred_result) => {
 
       let redmine_data= redmine_data_Deferred_result[0];
       let current_version= current_version_Deferred_result[0];
@@ -156,13 +161,37 @@ async function initCurrentIteration(configuration){
         }
       };
 
-      var myLineChart = new Chart(ctx, {
+      var burndown = new Chart(ctx, {
         type: 'line',
         data: data,
         options: options
       });
+      resolve(burndown);
     });
   });
+
+}
+
+async function loadBurndownCharts(configuration, $zone) {
+
+  let chart = await createBurndownCharts(configuration, $zone);
+  
+  // get all categories https://projects.visiativ.com/projects/moovapps-process-team/issue_categories.json
+  // loop over categories
+  //   get burndonw for this category
+  // let redmine_data_dev_Deferred = $.ajax({
+  //   url: "https://redminecharts.famaridon.com/api/charts/current/burndown-637",
+  // });
+  // let redmine_data_inte_Deferred = $.ajax({
+  //   url: "https://redminecharts.famaridon.com/api/charts/current/burndown-694",
+  // });
+  // let redmine_data_test_Deferred = $.ajax({
+  //   url: "https://redminecharts.famaridon.com/api/charts/current/burndown-695",
+  // });
+  // let redmine_data_acc_Deferred = $.ajax({
+  //   url: "https://redminecharts.famaridon.com/api/charts/current/burndown-701",
+  // });
+
 }
 
 async function initNextIteration(configuration){
