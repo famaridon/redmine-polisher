@@ -189,12 +189,10 @@ async function loadBurndownCharts(configuration, $zone) {
        url: `https://redminecharts.famaridon.com/api/charts/current/burndown-${category.id}`,
        timeout: 3000
     }).done((data) => {
-      // build real data
       var chartjs_data = [];
       data.forEach((item) => {
         chartjs_data.push({x: moment(item.x).toDate(), y: item.y});
       });
-      console.log(`${category.name} get color ${textToColor(category.name)}`);
       chart.data.labels.push(category.name);
       chart.data.datasets.push({
         label: category.name,
@@ -207,22 +205,6 @@ async function loadBurndownCharts(configuration, $zone) {
       chart.update();
     });
   });
-  // get all categories https://projects.visiativ.com/projects/moovapps-process-team/issue_categories.json
-  // loop over categories
-  //   get burndonw for this category
-  // let redmine_data_dev_Deferred = $.ajax({
-  //   url: "https://redminecharts.famaridon.com/api/charts/current/burndown-637",
-  // });
-  // let redmine_data_inte_Deferred = $.ajax({
-  //   url: "https://redminecharts.famaridon.com/api/charts/current/burndown-694",
-  // });
-  // let redmine_data_test_Deferred = $.ajax({
-  //   url: "https://redminecharts.famaridon.com/api/charts/current/burndown-695",
-  // });
-  // let redmine_data_acc_Deferred = $.ajax({
-  //   url: "https://redminecharts.famaridon.com/api/charts/current/burndown-701",
-  // });
-
 }
 
 function textToColor(text){
