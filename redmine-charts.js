@@ -53,20 +53,25 @@ async function initCurrentIteration(configuration){
   let $zone = $(`<div id="current-it" class="iteration zone" ></div>`);
   $("#main").append($zone);
   addMenuItem("Burndown",$zone, false, () => {
+    loadBurndownCharts(configuration, $zone);
+  });
+}
 
+/**
+* create chart with ideal datasets and global burndown
+**/
+async function createBurndownCharts(configuration, $zone) {
+  return new Promise((resolve, reject) => {
+    $zone.append(`<canvas id="burndown"></canvas>`);
+    var ctx = document.getElementById("burndown");
     // current iteration
     let redmine_data_Deferred = $.ajax({
       url: "https://redminecharts.famaridon.com/api/charts/current/burndown",
     });
-
     let current_version_Deferred = $.ajax({
       url: "https://redminecharts.famaridon.com/api/charts/current",
     });
-
-    $.when(redmine_data_Deferred, current_version_Deferred).done(( redmine_data_Deferred_result, current_version_Deferred_result ) => {
-
-      $zone.append(`<canvas id="burndown"></canvas>`);
-      var ctx = document.getElementById("burndown");
+    $.when(current_version_Deferred, redmine_data_Deferred).done((current_version_Deferred_result, redmine_data_Deferred_result) => {
 
       let redmine_data= redmine_data_Deferred_result[0];
       let current_version= current_version_Deferred_result[0];
@@ -156,14 +161,66 @@ async function initCurrentIteration(configuration){
         }
       };
 
-      var myLineChart = new Chart(ctx, {
+      var burndown = new Chart(ctx, {
         type: 'line',
         data: data,
         options: options
       });
+      resolve(burndown);
+    });
+  });
+
+}
+
+async function loadBurndownCharts(configuration, $zone) {
+
+  let chart = await createBurndownCharts(configuration, $zone);
+
+  let categories = await $.ajax({
+    method: "GET",
+    url: window.location.origin +"/projects/moovapps-process-team/issue_categories.json",
+    headers: {
+      'X-Redmine-API-Key': configuration.redmineAPIKey
+    }
+  }).promise();
+
+  categories.issue_categories.forEach(function(category) {
+    $.ajax({
+       url: `https://redminecharts.famaridon.com/api/charts/current/burndown-${category.id}`,
+       timeout: 3000
+    }).done((data) => {
+      var chartjs_data = [];
+      data.forEach((item) => {
+        chartjs_data.push({x: moment(item.x).toDate(), y: item.y});
+      });
+      chart.data.labels.push(category.name);
+      chart.data.datasets.push({
+        label: category.name,
+        lineTension: 0,
+        data: chartjs_data ,
+        borderColor: textToColor(category.name),
+        pointRadius: 0,
+        fill: true
+      });
+      chart.update();
     });
   });
 }
+
+function textToColor(text){
+  text = text.toUpperCase();
+  let red = charToColor(text.charCodeAt(0));
+  let green = charToColor(text.charCodeAt(1));
+  let blue = charToColor(text.charCodeAt(2));
+  return `rgb(${red},${green},${blue})`
+}
+
+function charToColor(char){
+  let code = char - 65;
+  return parseInt((code / 26) * 255);
+}
+
+
 
 async function initNextIteration(configuration){
   let $zone = $(`<div id="next-it" class="iteration zone">`);
