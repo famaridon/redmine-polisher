@@ -117,7 +117,7 @@ async function createBurndownCharts(configuration, $zone) {
           data: chartjs_data ,
           borderColor: "#36A2EB",
           pointRadius: 0,
-          fill: true
+          fill: false
         },{
           label: "Ideal",
           borderColor: '#FF6384',
@@ -150,9 +150,17 @@ async function createBurndownCharts(configuration, $zone) {
               format: timeFormat,
               // round: 'day'
               tooltipFormat: 'll HH:mm'
+            } ,
+            scaleLabel: {
+              display: true,
+              labelString: 'Date'
             }
           }],
           yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Points'
+            },
             ticks: {
               min: 0,
               stepSize: 10
@@ -186,8 +194,8 @@ async function loadBurndownCharts(configuration, $zone) {
 
   categories.issue_categories.forEach(function(category) {
     $.ajax({
-       url: `https://redminecharts.famaridon.com/api/charts/current/burndown-${category.id}`,
-       timeout: 3000
+      url: `https://redminecharts.famaridon.com/api/charts/current/burndown-${category.id}`,
+      timeout: 3000
     }).done((data) => {
       var chartjs_data = [];
       data.forEach((item) => {
@@ -200,7 +208,7 @@ async function loadBurndownCharts(configuration, $zone) {
         data: chartjs_data ,
         borderColor: textToColor(category.name),
         pointRadius: 0,
-        fill: true
+        fill: false
       });
       chart.update();
     });
@@ -219,8 +227,6 @@ function charToColor(char){
   let code = char - 65;
   return parseInt((code / 26) * 255);
 }
-
-
 
 async function initNextIteration(configuration){
   let $zone = $(`<div id="next-it" class="iteration zone">`);
@@ -265,6 +271,10 @@ async function initNextIteration(configuration){
         responsive: true,
         scales: {
           yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Business value'
+            },
             ticks: {
               max: 100,
               min: 0,
@@ -272,6 +282,10 @@ async function initNextIteration(configuration){
             }
           }],
           xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Points'
+            },
             ticks: {
               max: 100,
               min: 0
