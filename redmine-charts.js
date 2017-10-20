@@ -117,7 +117,7 @@ async function createBurndownCharts(configuration, $zone) {
           data: chartjs_data ,
           borderColor: "#36A2EB",
           pointRadius: 0,
-          fill: true
+          fill: false
         },{
           label: "Ideal",
           borderColor: '#FF6384',
@@ -208,7 +208,7 @@ async function loadBurndownCharts(configuration, $zone) {
         data: chartjs_data ,
         borderColor: textToColor(category.name),
         pointRadius: 0,
-        fill: true
+        fill: false
       });
       chart.update();
     });
