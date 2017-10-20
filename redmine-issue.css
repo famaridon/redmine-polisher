@@ -76,3 +76,15 @@ td.subject a.status-6{
 #history{
   margin-bottom: 25px;
 }
+
+
+.mandatory:after {
+    content: ' *';
+    color: #bb0000;
+}
+
+input[name='commit']:disabled, input[name='commit']:disabled:hover {
+    background-color: #868e96;
+    border-color: #868e96;
+    cursor: not-allowed;
+}
