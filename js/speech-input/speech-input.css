@@ -1,3 +1,9 @@
+/* fix to allow click in wysiwyg */
+.jstElements {
+  float: unset !important;
+  height: 30px;
+}
+
 .jstEditor .si-wrapper {
   display: block;
   width: 100%;
