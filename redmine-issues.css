@@ -8,17 +8,17 @@ span.icon{
   background-repeat: no-repeat;
 }
 
-.icon.icon-user-story{
+.icon.icon-user-story, .icon.icon-evolutions {
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/user-story.png");
   background-image: url("/images/user-story.png");
 }
 
-.icon.icon-task{
+.icon.icon-task, .icon.icon-tâches {
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/task.png");
   background-image: url("/images/task.png");
 }
 
-.icon.icon-defect{
+.icon.icon-defect, .icon.icon-anomalies {
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/bug.png");
   background-image: url("/images/bug.png");
 }

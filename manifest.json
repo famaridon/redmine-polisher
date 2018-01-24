@@ -9,8 +9,8 @@
 	  "id": "redmine-polisher@visiativ.com"
     }
   },
-  "version": "1.8.1",
-  "version_name": "1.8.1",
+  "version": "1.8.2",
+  "version_name": "1.8.2",
   "options_page": "options.html",
   "options_ui": {"page" : "options.html"},
   "author": "visiativ",
