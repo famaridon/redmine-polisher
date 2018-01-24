@@ -387,11 +387,18 @@ function rebuildAssignedTo(issue){
   });
 }
 
-function rebuildTracker(issue,tracker){
-  var html = tracker.html();
-  var simpleTrackerHtml = html.substring("R&amp;D INNOVATION - ".length, html.length);
-  simpleTrackerHtml = simpleTrackerHtml.toLowerCase().replace(new RegExp(' ', 'g'),'-')
-  issue.find("td.subject").prepend($('<span class="icon icon-'+simpleTrackerHtml+'"></span>'))
+function rebuildTracker(issue,tracker) {
+    var html = tracker.html();
+    var simpleTrackerHtml;
+    if(html.indexOf("R&amp;D INNOVATION - ") >= 0) {
+        simpleTrackerHtml = html.substring("R&amp;D INNOVATION - ".length, html.length);
+        simpleTrackerHtml = simpleTrackerHtml.toLowerCase().replace(new RegExp(' ', 'g'), '-');
+    } else if(html.indexOf("PROJET - ") >= 0) {
+        simpleTrackerHtml = html.substring("PROJET - ".length, html.length);
+        simpleTrackerHtml = simpleTrackerHtml.toLowerCase().replace(new RegExp(' ', 'g'), '-');
+    }
+
+    issue.find("td.subject").prepend($('<span class="icon icon-' + simpleTrackerHtml + '"></span>'));
 }
 
 function rebuildPriority(priority){
