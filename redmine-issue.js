@@ -80,8 +80,8 @@ $(document).ready(function () {
             tooltips.setupTooltips(issue.find(".subject a"));
         });
 
-        $("#issue_subject").speechInput();
-        $("textarea").speechInput();
+        // $("#issue_subject").speechInput();
+        // $("textarea").speechInput();
     });
 });
 
