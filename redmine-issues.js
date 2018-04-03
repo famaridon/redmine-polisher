@@ -11,15 +11,15 @@ var selectedStatus = new Array();
 function rebuildIssuesTable(){
 
   // remove headers (some td are only used for data)
-  $('.list.issues th[title=\'Trier par "Tracker"\']').remove();
-  $('.list.issues th[title=\'Sort by "Tracker"\']').remove();
-  $('.list.issues th[title=\'Sort by "Parent task"\']').remove();
-  $('.list.issues th[title=\'Trier par "Tâche parente"\']').remove();
+  $('.list.issues th a[title=\'Trier par "Tracker"\']').parent().remove();
+  $('.list.issues th a[title=\'Sort by "Tracker"\']').parent().remove();
+  $('.list.issues th a[title=\'Sort by "Parent task"\']').parent().remove();
+  $('.list.issues th a[title=\'Trier par "Tâche parente"\']').parent().remove();
 
   haveCategory = $('.list.issues .issue .category').length > 0;
   if(haveCategory){
-    $('.list.issues th[title=\'Trier par "Catégorie"\']').remove();
-    $('.list.issues th[title=\'Sort by "Category"\']').remove();
+    $('.list.issues th a[title=\'Trier par "Catégorie"\']').parent().remove();
+    $('.list.issues th a[title=\'Sort by "Category"\']').parent().remove();
   }
 
   $("tr.issue").each(function(index, value){

@@ -48,7 +48,6 @@ $(document).ready(function () {
     var input = $("#issue_custom_field_values_29").closest("div[class^=\"splitcontent\"]");
     input.removeClass("splitcontentright");
     input.removeClass("splitcontentleft");
-    input.appendTo($("#update .attributes"));
     input.find("textarea").attr("rows", 10);
 
     // build support link
@@ -80,8 +79,8 @@ $(document).ready(function () {
             tooltips.setupTooltips(issue.find(".subject a"));
         });
 
-        $("#issue_subject").speechInput();
-        $("textarea").speechInput();
+        // $("#issue_subject").speechInput();
+        // $("textarea").speechInput();
     });
 });
 
