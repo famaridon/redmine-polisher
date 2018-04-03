@@ -28,7 +28,7 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/improvement.png");
 }
 
-.icon.icon-immediat{
+.icon.icon-immediat, .icon.icon-showstopper{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority1.png");
 }
 
@@ -36,7 +36,7 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority2.png");
 }
 
-.icon.icon-haut{
+.icon.icon-haut, .icon.icon-high{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority3.png");
 }
 
@@ -44,7 +44,7 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority4.png");
 }
 
-.icon.icon-bas{
+.icon.icon-bas, .icon.icon-low{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/priority/priority5.png");
 }
 
