@@ -10,6 +10,9 @@ var selectedStatus = new Array();
 
 function rebuildIssuesTable(){
 
+    $('.list.issues th a[title=\'Sort by "Development cost (Points)"\']').html('Points');
+    $('.list.issues th a[title=\'Sort by "Business Value (0-100)"\']').html('BV');
+
   // remove headers (some td are only used for data)
   $('.list.issues th a[title=\'Trier par "Tracker"\']').parent().remove();
   $('.list.issues th a[title=\'Sort by "Tracker"\']').parent().remove();
