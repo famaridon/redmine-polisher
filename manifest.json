@@ -26,10 +26,12 @@
       ]
       },{
         "matches": [
-          "https://projects.visiativ.com/*/issues*"
+          "https://projects.visiativ.com/*/issues*",
+          "https://redmine-visiativ.preprod.moovapps.com/*/issues*"
         ],
         "exclude_matches": [
-            "https://projects.visiativ.com/*/issues/new*"
+            "https://projects.visiativ.com/*/issues/new*",
+            "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*"
         ],
         "css": [
           "redmine-issues.css",
@@ -52,7 +54,8 @@
       },
       {
         "matches": [
-          "https://projects.visiativ.com/projects"
+          "https://projects.visiativ.com/projects",
+          "https://redmine-visiativ.preprod.moovapps.com/projects"
         ],
         "css": [
           "redmine-projects.css",
@@ -66,7 +69,9 @@
       {
         "matches": [
           "https://projects.visiativ.com/issues/*",
-          "https://projects.visiativ.com/*/issues/new*"
+          "https://projects.visiativ.com/*/issues/new*",
+          "https://redmine-visiativ.preprod.moovapps.com/issues/*",
+          "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*"
         ],
         "css": [
           "redmine-issue.css",
