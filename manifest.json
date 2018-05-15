@@ -12,7 +12,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://projects.visiativ.com/*"
+        "https://projects.visiativ.com/*",
+        "https://redmine-visiativ.preprod.moovapps.com/*"
       ],
       "css": [
         "redmine-global.css",
