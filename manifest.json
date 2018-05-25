@@ -78,13 +78,15 @@
           "redmine-tooltips.css",
           "js/tooltipster/css/tooltipster.core.css",
           "js/tooltipster/css/tooltipster.bundle.css",
-          "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css"
+          "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
+          "js/select2/select2.css"
         ],
         "js": [
           "js/textile/textile.js",
           "js/tooltipster/js/tooltipster.bundle.js",
           "redmine-tooltips.js",
-          "redmine-issue.js"
+          "redmine-issue.js",
+          "js/select2/select2.js"
         ]
       },{
         "matches": [

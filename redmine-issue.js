@@ -83,6 +83,13 @@ $(document).ready(function () {
         // $("#issue_subject").speechInput();
         // $("textarea").speechInput();
     });
+
+    $('#issue_custom_field_values_32').select2({
+        width: '100%',
+        sorter: function(arr) {
+            return arr.sort(function(a,b){return a.text == b.text ? 0 : a.text < b.text ? -1 : 1;});
+        }
+    });
 });
 
 function addSpeechToText(configuration, $input) {
