@@ -14,11 +14,13 @@
 #relations .contextual a,
 #issue_tree .contextual a,
 .contextual a.icon{
-    background-color: #1570b7;
     padding: 10px;
     color: white !important;
     font-size: 15px;
     background-position: 5px;
+    border-radius: 4px;
+    background-color: #2996cc;
+    transition: background-color .2s ease-in-out, color .2s ease-in-out, opacity .2s ease-in-out;
 }
 
 #relations .contextual a,
@@ -34,8 +36,9 @@
 #relations .contextual a:hover,
 #issue_tree .contextual a:hover,
 .contextual a.icon:hover{
-  background-color: #15609a;
   text-decoration: none;
+  background-color: #3ba8de;
+  color: #fff;
 }
 
 /* RSS PDF buttons */
