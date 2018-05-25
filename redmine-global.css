@@ -1,8 +1,8 @@
 /* Header */
 .theme-Visiativ2016 #header > h1 {
     padding: 5px 0px 15px 140px;
+    background: url(/themes/visiativ2016//images/logo.png) 0px 1px no-repeat;
     background-size: 110px;
-    background: url(../images/logo.png) 0px 1px no-repeat;
 }
 
 .theme-Visiativ2016 #quick-search {
