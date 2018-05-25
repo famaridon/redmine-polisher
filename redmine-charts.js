@@ -20,8 +20,10 @@ async function getConfiguration() {
 }
 
 async function init(){
-  let configuration = await getConfiguration();
   $("#main").empty();
+  // add canavas to disable standard chart
+  $("#main").append(`<canvas id="agile-chart" style="display: none;"></canvas>`);
+  let configuration = await getConfiguration();
   initMenu(configuration);
   initCurrentIteration(configuration);
   initNextIteration(configuration);
