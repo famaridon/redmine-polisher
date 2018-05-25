@@ -88,3 +88,7 @@ input[name='commit']:disabled, input[name='commit']:disabled:hover {
     border-color: #868e96;
     cursor: not-allowed;
 }
+
+select[multiple='multiple']{
+  resize: auto;
+}
