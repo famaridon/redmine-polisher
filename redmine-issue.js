@@ -86,6 +86,7 @@ $(document).ready(function () {
 
     $('#issue_custom_field_values_32').select2({
         width: '100%',
+        closeOnSelect: false,
         sorter: function(arr) {
             return arr.sort(function(a,b){return a.text == b.text ? 0 : a.text < b.text ? -1 : 1;});
         }
