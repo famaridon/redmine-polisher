@@ -17,9 +17,15 @@ var observer = new MutationObserver(function (mutations, observer) {
         $("#issue_assigned_to_id").val("");
     }
 
-    const $issue_developement_cost = $("#issue_custom_field_values_28");
-    const $issue_estimated_hours = $("#issue_estimated_hours");
-    $issue_estimated_hours.val($issue_developement_cost.val());
+    chrome.storage.sync.get({
+        syncDevelopmentCostToEstimatedHours: false
+    }, function (configuration) {
+        if(configuration.syncDevelopmentCostToEstimatedHours) {
+            const $issue_developement_cost = $("#issue_custom_field_values_28");
+            const $issue_estimated_hours = $("#issue_estimated_hours");
+            $issue_estimated_hours.val($issue_developement_cost.val());
+        }
+    });
 
 });
 
@@ -66,7 +72,8 @@ $(document).ready(function () {
         $(item).find("td.subject").html(link);
     });
     chrome.storage.sync.get({
-        redmineAPIKey: null
+        redmineAPIKey: null,
+        syncDevelopmentCostToEstimatedHours: false
     }, function (configuration) {
         console.info("Configuration loaded : ");
         console.debug(configuration);
@@ -83,10 +90,15 @@ $(document).ready(function () {
             issue.attr('data-tt-id', issue.find("a.issue").attr('href').split('/')[2]);
             tooltips.setupTooltips(issue.find(".subject a"));
         });
-    });
 
-    $("#issue_custom_field_values_28").on("change", ( event) => {
-        $("#issue_estimated_hours").val($( event.currentTarget ).val());
+        if(configuration.syncDevelopmentCostToEstimatedHours) {
+            $("#issue_custom_field_values_28").on("change", ( event) => {
+                $("#issue_estimated_hours").val($( event.currentTarget ).val());
+            });
+            $("#issue_estimated_hours").parent().hide();
+            $(".estimated-hours.attribute").hide();
+
+        }
     });
 
     $('#issue_custom_field_values_32').select2({
@@ -98,7 +110,7 @@ $(document).ready(function () {
     });
 
     $("#issue_description_and_toolbar").show();
-    $("#issue_estimated_hours").parent().hide();
+    
 });
 
 function addSpeechToText(configuration, $input) {
