@@ -16,6 +16,11 @@ var observer = new MutationObserver(function (mutations, observer) {
         $("#issue_done_ratio").val("0");
         $("#issue_assigned_to_id").val("");
     }
+
+    const $issue_developement_cost = $("#issue_custom_field_values_28");
+    const $issue_estimated_hours = $("#issue_estimated_hours");
+    $issue_estimated_hours.val($issue_developement_cost.val());
+
 });
 
 observer.observe(document.getElementById("all_attributes"), {
@@ -78,9 +83,10 @@ $(document).ready(function () {
             issue.attr('data-tt-id', issue.find("a.issue").attr('href').split('/')[2]);
             tooltips.setupTooltips(issue.find(".subject a"));
         });
+    });
 
-        // $("#issue_subject").speechInput();
-        // $("textarea").speechInput();
+    $("#issue_custom_field_values_28").on("change", ( event) => {
+        $("#issue_estimated_hours").val($( event.currentTarget ).val());
     });
 
     $('#issue_custom_field_values_32').select2({
@@ -90,6 +96,9 @@ $(document).ready(function () {
             return arr.sort(function(a,b){return a.text == b.text ? 0 : a.text < b.text ? -1 : 1;});
         }
     });
+
+    $("#issue_description_and_toolbar").show();
+    $("#issue_estimated_hours").parent().hide();
 });
 
 function addSpeechToText(configuration, $input) {
