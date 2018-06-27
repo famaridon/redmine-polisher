@@ -1,9 +1,10 @@
 // Saves options to chrome.storage
 function save_options() {
-    var redmineAPIKey = document.getElementById('redmineAPIKey').value;
-    var enableInlineEdit = document.getElementById('enableInlineEdit').checked;
-    var syncDevelopmentCostToEstimatedHours = document.getElementById('syncDevelopmentCostToEstimatedHours').checked;
-    var defaultState = document.getElementById('defaultState').value;
+    const redmineAPIKey = document.getElementById('redmineAPIKey').value;
+    const enableInlineEdit = document.getElementById('enableInlineEdit').checked;
+    const syncDevelopmentCostToEstimatedHours = document.getElementById('syncDevelopmentCostToEstimatedHours').checked;
+    const defaultState = document.getElementById('defaultState').value;
+    debugger
     chrome.storage.sync.set({
         redmineAPIKey: redmineAPIKey,
         enableInlineEdit: enableInlineEdit,
@@ -11,11 +12,11 @@ function save_options() {
         defaultState: defaultState
     }, function () {
         // Update status to let user know options were saved.
-        var status = document.getElementById('status');
+        const status = document.getElementById('status');
         status.textContent = 'Options saved.';
         setTimeout(function () {
             status.textContent = '';
-        }, 750);
+        }, 1500);
     });
 }
 
@@ -24,8 +25,10 @@ function restore_options() {
     chrome.storage.sync.get({
         redmineAPIKey: "",
         enableInlineEdit: true,
+        syncDevelopmentCostToEstimatedHours: false,
         defaultState: "categories"
     }, function (items) {
+        debugger
         document.getElementById('redmineAPIKey').value = items.redmineAPIKey;
         if (items.enableInlineEdit) {
             document.getElementById('enableInlineEdit').checked = 'checked';
