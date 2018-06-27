@@ -97,6 +97,8 @@ $(document).ready(function () {
                 $("#issue_estimated_hours").val($( event.currentTarget ).val());
             });
             $("#issue_estimated_hours").parent().hide();
+            $(".estimated-hours.attribute").hide();
+
         }
     });
 
