@@ -110,7 +110,56 @@ $(document).ready(function () {
         }
     });
 
-    $("#issue_description_and_toolbar").show();
+    let iteration$ = $("#issue_custom_field_values_35");
+    if ( iteration$.length ) {
+        $.ajax({
+            type:"GET",
+            dataType: 'text',
+            url:"https://raw.githubusercontent.com/vdoc-community/redmine-datas/master/data.json"
+        }).then(( data ) => {
+            const object = JSON.parse(data,(key, value) => {
+                if(key.endsWith('Date') ){
+                    return new Date(value);
+                } else {
+                    return value;
+                }
+            });
+
+            const selectedValue = parseInt(iteration$.val());
+
+            // convert input to select
+            const iterationParent$ = iteration$.parent();
+            iteration$.remove();
+            $(`<select name="${iteration$.attr('name')}" id="${iteration$.attr('id')}"></select>`).appendTo(iterationParent$);
+            iteration$ = $("#issue_custom_field_values_35");
+
+            const currents$ = $(`<optgroup label="Currents"></optgroup>`);
+            const previous$ = $(`<optgroup label="Previous"></optgroup>`);
+            currents$.appendTo(iteration$);
+            previous$.appendTo(iteration$);
+            object.iterations.forEach((item) => {
+                const target$ = item.endDate < new Date() ? previous$ : currents$;
+                const option$ = $(`<option value="${item.number}">${item.number}</option>`);
+                option$.appendTo(target$);
+            });
+
+            iteration$.val(selectedValue);
+
+            // setup select 2
+            iteration$.select2({
+                dropdownAutoWidth: true
+            });
+
+        }).catch((e) => {
+            console.error(e);
+        });
+    }
+
+
+    // default editing display the description and hide the edit link
+    const description$ = $("#issue_description_and_toolbar");
+    description$.show();
+    description$.parent().find(' > a').hide();
     
 });
 
