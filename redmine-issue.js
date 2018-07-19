@@ -125,10 +125,7 @@ $(document).ready(function () {
                 }
             });
 
-            const options = [];
-            object.iterations.forEach((item) => {
-                options.push({id: item.number, text:item.number, selected: parseInt(iteration$.val()) === item.number });
-            });
+            const selectedValue = parseInt(iteration$.val());
 
             // convert input to select
             const iterationParent$ = iteration$.parent();
@@ -136,9 +133,21 @@ $(document).ready(function () {
             $(`<select name="${iteration$.attr('name')}" id="${iteration$.attr('id')}"></select>`).appendTo(iterationParent$);
             iteration$ = $("#issue_custom_field_values_35");
 
+            const currents$ = $(`<optgroup label="Currents"></optgroup>`);
+            const previous$ = $(`<optgroup label="Previous"></optgroup>`);
+            currents$.appendTo(iteration$);
+            previous$.appendTo(iteration$);
+            object.iterations.forEach((item) => {
+                const target$ = item.endDate < new Date() ? previous$ : currents$;
+                const option$ = $(`<option value="${item.number}">${item.number}</option>`);
+                option$.appendTo(target$);
+            });
+
+            iteration$.val(selectedValue);
+
             // setup select 2
             iteration$.select2({
-                data: options
+                dropdownAutoWidth: true
             });
 
         }).catch((e) => {
