@@ -110,7 +110,47 @@ $(document).ready(function () {
         }
     });
 
-    $("#issue_description_and_toolbar").show();
+    let iteration$ = $("#issue_custom_field_values_35");
+    if ( iteration$.length ) {
+        $.ajax({
+            type:"GET",
+            dataType: 'text',
+            url:"https://raw.githubusercontent.com/vdoc-community/redmine-datas/master/data.json"
+        }).then(( data ) => {
+            const object = JSON.parse(data,(key, value) => {
+                if(key.endsWith('Date') ){
+                    return new Date(value);
+                } else {
+                    return value;
+                }
+            });
+
+            const options = [];
+            object.iterations.forEach((item) => {
+                options.push({id: item.number, text:item.number, selected: parseInt(iteration$.val()) === item.number });
+            });
+
+            // convert input to select
+            const iterationParent$ = iteration$.parent();
+            iteration$.remove();
+            $(`<select name="${iteration$.attr('name')}" id="${iteration$.attr('id')}"></select>`).appendTo(iterationParent$);
+            iteration$ = $("#issue_custom_field_values_35");
+
+            // setup select 2
+            iteration$.select2({
+                data: options
+            });
+
+        }).catch((e) => {
+            console.error(e);
+        });
+    }
+
+
+    // default editing display the description and hide the edit link
+    const description$ = $("#issue_description_and_toolbar");
+    description$.show();
+    description$.parent().find(' > a').hide();
     
 });
 
