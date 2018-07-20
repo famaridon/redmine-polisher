@@ -1,6 +1,6 @@
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
-var observer = new MutationObserver(function (mutations, observer) {
+const observer = new MutationObserver(function (mutations, observer) {
     const $issue_status = $("#issue_status_id");
     if ($issue_status.val() === "24" || $issue_status.val() === "6") { // A valider
         $("#issue_done_ratio").val("100");
@@ -29,11 +29,13 @@ var observer = new MutationObserver(function (mutations, observer) {
 
 });
 
-observer.observe(document.getElementById("all_attributes"), {
-    subtree: true,
-    attributes: true
-});
-
+const allAttributes = document.getElementById("all_attributes");
+if(allAttributes) {
+    observer.observe(allAttributes, {
+        subtree: true,
+        attributes: true
+    });
+}
 
 function checkTargetVersion($issue_fixed_version){
     $("label[for='issue_fixed_version_id']").addClass('mandatory');
@@ -130,7 +132,7 @@ $(document).ready(function () {
             // convert input to select
             const iterationParent$ = iteration$.parent();
             iteration$.remove();
-            $(`<select name="${iteration$.attr('name')}" id="${iteration$.attr('id')}"></select>`).appendTo(iterationParent$);
+            $(`<select name="${iteration$.attr('name')}" id="${iteration$.attr('id')}"></select>`).prependTo(iterationParent$);
             iteration$ = $("#issue_custom_field_values_35");
 
             const currents$ = $(`<optgroup label="Currents"></optgroup>`);

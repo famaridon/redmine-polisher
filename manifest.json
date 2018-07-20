@@ -31,7 +31,8 @@
         ],
         "exclude_matches": [
             "https://projects.visiativ.com/*/issues/new*",
-            "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*"
+            "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*",
+            "https://redmine-visiativ.preprod.moovapps.com/*/issues/bulk_edit*"
         ],
         "css": [
           "redmine-issues.css",
@@ -71,7 +72,8 @@
           "https://projects.visiativ.com/issues/*",
           "https://projects.visiativ.com/*/issues/new*",
           "https://redmine-visiativ.preprod.moovapps.com/issues/*",
-          "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*"
+          "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*",
+          "https://redmine-visiativ.preprod.moovapps.com/*/issues/bulk_edit*"
         ],
         "css": [
           "redmine-issue.css",
