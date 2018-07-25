@@ -3,14 +3,14 @@
 
   "name": "Visiativ Redmine polisher",
   "description": "This extension polish redmine ui",
+  "version": "1.11.1",
+  "version_name": "1.11.1",
   "applications": {
   "gecko": {
       "update_url": "https://toscer.me/addons/redmine-polisher/updates.json",
 	  "id": "redmine-polisher@visiativ.com"
     }
   },
-  "version": "1.10.1",
-  "version_name": "1.10.1",
   "options_page": "options.html",
   "options_ui": {"page" : "options.html"},
   "author": "visiativ",
@@ -39,7 +39,8 @@
         ],
         "exclude_matches": [
             "https://projects.visiativ.com/*/issues/new*",
-            "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*"
+            "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*",
+            "https://redmine-visiativ.preprod.moovapps.com/*/issues/bulk_edit*"
         ],
         "css": [
           "redmine-issues.css",
@@ -81,7 +82,8 @@
           "https://projects.visiativ.com/issues/*",
           "https://projects.visiativ.com/*/issues/new*",
           "https://redmine-visiativ.preprod.moovapps.com/issues/*",
-          "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*"
+          "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*",
+          "https://redmine-visiativ.preprod.moovapps.com/*/issues/bulk_edit*"
         ],
         "css": [
           "redmine-issue.css",

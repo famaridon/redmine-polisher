@@ -532,7 +532,9 @@ class Project {
       .done(function(data){
         var membersArray = [];
         $(data.memberships).each(function(index, membership){
-          membersArray.push({value:membership.user.id, text:membership.user.name});
+          if(membership.user) {
+              membersArray.push({value:membership.user.id, text:membership.user.name});
+          }
         });
         self.members.resolve(membersArray);
       });
