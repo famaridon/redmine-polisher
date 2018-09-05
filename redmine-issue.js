@@ -144,6 +144,8 @@ $(document).ready(function () {
                 const option$ = $(`<option value="${item.number}">${item.number}</option>`);
                 option$.appendTo(target$);
             });
+			const rstOption$ = $(`<option value="">&nbsp;</option>`);
+            rstOption$.appendTo(previous$);
 
             iteration$.val(selectedValue);
 
