@@ -1,6 +1,5 @@
 {
   "manifest_version": 2,
-
   "name": "Visiativ Redmine polisher",
   "description": "This extension polish redmine ui",
   "version": "1.11.1",
@@ -24,100 +23,111 @@
         "redmine-global.js",
         "js/speech-input/speech-input.js"
       ]
-      },{
-        "matches": [
-          "https://projects.visiativ.com/*/issues*",
-          "https://redmine-visiativ.preprod.moovapps.com/*/issues*"
-        ],
-        "exclude_matches": [
-            "https://projects.visiativ.com/*/issues/new*",
-            "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*",
-            "https://redmine-visiativ.preprod.moovapps.com/*/issues/bulk_edit*"
-        ],
-        "css": [
-          "redmine-issues.css",
-          "redmine-tooltips.css",
-          "js/tooltipster/css/tooltipster.core.css",
-          "js/tooltipster/css/tooltipster.bundle.css",
-          "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
-          "js/jquery-editable/css/jquery-editable.css",
-          "js/poshytip/tip-default/tip-default.css"
-        ],
-        "js": [
-          "js/jquery.treetable.js",
-          "redmine-tooltips.js",
-          "redmine-issues.js",
-          "js/tooltipster/js/tooltipster.bundle.js",
-          "js/textile/textile.js",
-          "js/poshytip/jquery.poshytip.js",
-          "js/jquery-editable/js/jquery-editable-poshytip.js"
-        ]
-      },
-      {
-        "matches": [
-          "https://projects.visiativ.com/projects",
-          "https://redmine-visiativ.preprod.moovapps.com/projects"
-        ],
-        "css": [
-          "redmine-projects.css",
-          "js/jstree/themes/default/style.css"
-        ],
-        "js": [
-          "js/jstree/jstree.js",
-          "redmine-projects.js"
-        ]
-      },
-      {
-        "matches": [
-          "https://projects.visiativ.com/issues/*",
-          "https://projects.visiativ.com/*/issues/new*",
-          "https://redmine-visiativ.preprod.moovapps.com/issues/*",
-          "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*",
-          "https://redmine-visiativ.preprod.moovapps.com/*/issues/bulk_edit*"
-        ],
-        "css": [
-          "redmine-issue.css",
-          "redmine-tooltips.css",
-          "js/tooltipster/css/tooltipster.core.css",
-          "js/tooltipster/css/tooltipster.bundle.css",
-          "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
-          "js/select2/select2.css"
-        ],
-        "js": [
-          "js/textile/textile.js",
-          "js/tooltipster/js/tooltipster.bundle.js",
-          "redmine-tooltips.js",
-          "redmine-issue.js",
-          "js/select2/select2.js"
-        ]
-      },{
-        "matches": [
-          "https://projects.visiativ.com/projects/moovapps-process-team/agile/charts*"
-        ],
-        "css": [
-          "redmine-charts.css"
-        ],
-        "js": [
-          "js/moment.js",
-          "js/Chart.js",
-          "redmine-charts.js"
-        ]
-      }
-    ],
-    "background": {
-        "scripts": [
-            "query-pager.js"
-        ]
-     },
-    "permissions": [
-      "webNavigation",
-      "storage",
-      "webRequest",
-      "webRequestBlocking",
-      "https://projects.visiativ.com/*/issues*"
-    ],
-    "web_accessible_resources": [
-      "images/*",
-      "js/*"
+    },
+    {
+      "matches": [
+        "https://projects.visiativ.com/*/issues*",
+        "https://redmine-visiativ.preprod.moovapps.com/*/issues*"
+      ],
+      "exclude_matches": [
+        "https://projects.visiativ.com/*/issues/new*",
+        "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*",
+        "https://redmine-visiativ.preprod.moovapps.com/*/issues/bulk_edit*"
+      ],
+      "css": [
+        "redmine-issues.css",
+        "redmine-tooltips.css",
+        "js/tooltipster/css/tooltipster.core.css",
+        "js/tooltipster/css/tooltipster.bundle.css",
+        "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
+        "js/jquery-editable/css/jquery-editable.css",
+        "js/poshytip/tip-default/tip-default.css"
+      ],
+      "js": [
+        "js/jquery.treetable.js",
+        "redmine-tooltips.js",
+        "redmine-issues.js",
+        "js/tooltipster/js/tooltipster.bundle.js",
+        "js/textile/textile.js",
+        "js/poshytip/jquery.poshytip.js",
+        "js/jquery-editable/js/jquery-editable-poshytip.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://projects.visiativ.com/projects",
+        "https://redmine-visiativ.preprod.moovapps.com/projects"
+      ],
+      "css": [
+        "redmine-projects.css",
+        "js/jstree/themes/default/style.css"
+      ],
+      "js": [
+        "js/jstree/jstree.js",
+        "redmine-projects.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://projects.visiativ.com/issues/*",
+        "https://projects.visiativ.com/*/issues/new*",
+        "https://redmine-visiativ.preprod.moovapps.com/issues/*",
+        "https://redmine-visiativ.preprod.moovapps.com/*/issues/new*",
+        "https://redmine-visiativ.preprod.moovapps.com/*/issues/bulk_edit*"
+      ],
+      "css": [
+        "redmine-issue.css",
+        "redmine-tooltips.css",
+        "js/tooltipster/css/tooltipster.core.css",
+        "js/tooltipster/css/tooltipster.bundle.css",
+        "js/tooltipster/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css",
+        "js/select2/select2.css"
+      ],
+      "js": [
+        "js/textile/textile.js",
+        "js/tooltipster/js/tooltipster.bundle.js",
+        "redmine-tooltips.js",
+        "redmine-issue.js",
+        "js/select2/select2.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://projects.visiativ.com/projects/moovapps-process-team/agile/charts*"
+      ],
+      "css": [
+        "redmine-charts.css"
+      ],
+      "js": [
+        "js/moment.js",
+        "js/Chart.js",
+        "redmine-charts.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://projects.visiativ.com/login*"
+      ],
+      "css": [
+        "redmine-login.css"
+      ],
+      "js": []
+    }
+  ],
+  "background": {
+    "scripts": [
+      "query-pager.js"
     ]
-  }
+  },
+  "permissions": [
+    "webNavigation",
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "https://projects.visiativ.com/*/issues*"
+  ],
+  "web_accessible_resources": [
+    "images/*",
+    "js/*"
+  ]
+}
