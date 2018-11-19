@@ -66,8 +66,13 @@ $(document).ready(function () {
 
     // build support link
     var ticketId = $('div.cf_1 > div.value').html();
-    var ticketLink = $('div.cf_3 > div.value').html();
-    $('div.cf_3 > div.value').html('<a href="' + ticketLink + '">' + ticketId + '</a>');
+    var ticketValue$ = $('div.cf_3 > div.value');
+    var ticketLink = ticketValue$.html();
+    if(!ticketId) {
+        // try to extract ticket id https://www.mymoovapps.net/admin/helpdesk/dashboard/operator/my_ticket_work/ticket/54394#ticket_simplified
+        ticketId = /^http(s)?:\/\/www\.mymoovapps\.net.*\/([0-9]*)#/.exec('https://www.mymoovapps.net/admin/helpdesk/dashboard/operator/my_ticket_work/ticket/54394#ticket_si')[2];
+    }
+    ticketValue$.html('<a href="' + ticketLink + '">' + ticketId + '</a>');
     $('div.cf_1').hide();
     $(".list.issues tr.issue").each(function (index, item) {
         var link = $(item).find("td.subject a");
