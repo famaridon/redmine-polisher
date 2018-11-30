@@ -38,7 +38,11 @@ if(allAttributes) {
 }
 
 function checkTargetVersion($issue_fixed_version){
-    $("label[for='issue_fixed_version_id']").addClass('mandatory');
+    const labelForfixeVersion$ =$("label[for='issue_fixed_version_id']");
+    if(labelForfixeVersion$.length === 0) {
+        return;
+    }
+    labelForfixeVersion$.addClass('mandatory');
     const $commit = $("input[name='commit']");
     if (!$issue_fixed_version.val()) {
         $commit.attr('disabled', 'disabled');
