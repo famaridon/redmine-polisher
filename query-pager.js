@@ -7,7 +7,7 @@ browser.webRequest.onBeforeRequest.addListener(
       } else {
         redirectUrl += "&";
       }
-      return {redirectUrl: redirectUrl+"per_page=500" };
+      return {redirectUrl: redirectUrl+"per_page=5000" };
     }
   },
   {urls: ["https://projects.visiativ.com/*/issues*"]},
