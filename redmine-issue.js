@@ -38,7 +38,11 @@ if(allAttributes) {
 }
 
 function checkTargetVersion($issue_fixed_version){
-    $("label[for='issue_fixed_version_id']").addClass('mandatory');
+    const labelForfixeVersion$ =$("label[for='issue_fixed_version_id']");
+    if(labelForfixeVersion$.length === 0) {
+        return;
+    }
+    labelForfixeVersion$.addClass('mandatory');
     const $commit = $("input[name='commit']");
     if (!$issue_fixed_version.val()) {
         $commit.attr('disabled', 'disabled');
@@ -66,8 +70,13 @@ $(document).ready(function () {
 
     // build support link
     var ticketId = $('div.cf_1 > div.value').html();
-    var ticketLink = $('div.cf_3 > div.value').html();
-    $('div.cf_3 > div.value').html('<a href="' + ticketLink + '">' + ticketId + '</a>');
+    var ticketValue$ = $('div.cf_3 > div.value');
+    var ticketLink = ticketValue$.html();
+    if(!ticketId) {
+        // try to extract ticket id https://www.mymoovapps.net/admin/helpdesk/dashboard/operator/my_ticket_work/ticket/54394#ticket_simplified
+        ticketId = /^http(s)?:\/\/www\.mymoovapps\.(com|net).*\/([0-9]*)#/.exec(ticketLink)[3];
+    }
+    ticketValue$.html('<a href="' + ticketLink + '">' + ticketId + '</a>');
     $('div.cf_1').hide();
     $(".list.issues tr.issue").each(function (index, item) {
         var link = $(item).find("td.subject a");

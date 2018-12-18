@@ -419,18 +419,24 @@ function rebuildFixedVersion(version){
 }
 
 function buildParentLink(issue, parent){
+    //check if issuie has a parent
   var haveParent = typeof parent.attr('href') !== 'undefined';
+  var parentId;
+  if(haveParent){
+      //check if parent issue is in the current page
+      parentId = /[^/]*$/.exec(parent.attr('href'))[0];
+      haveParent = $('#issue-' +parentId ).length > 0;
+  }
   if(haveCategory && ( issue.hasClass("tracker-36") || !haveParent ) ) // if we display category and issue is "Use case"
   {
     // try to use categories
     var category = $(issue).find(".category").html();
     if(category !== ""){
       categories.add(category);
-      issue.attr('data-tt-parent-id',category);
+      issue.attr('data-tt-parent-id', category);
     }
   } else if(haveParent) {
-    var parentId = /[^/]*$/.exec(parent.attr('href'))[0];
-    issue.attr('data-tt-parent-id',parentId);
+    issue.attr('data-tt-parent-id', parentId);
   }
 
   if(haveCategory){
