@@ -4,9 +4,11 @@ function save_options() {
     const enableInlineEdit = document.getElementById('enableInlineEdit').checked;
     const syncDevelopmentCostToEstimatedHours = document.getElementById('syncDevelopmentCostToEstimatedHours').checked;
     const defaultState = document.getElementById('defaultState').value;
-    debugger
+    const perPage = document.getElementById('perPage').value;
+
     chrome.storage.sync.set({
         redmineAPIKey: redmineAPIKey,
+        perPage: perPage,
         enableInlineEdit: enableInlineEdit,
         syncDevelopmentCostToEstimatedHours: syncDevelopmentCostToEstimatedHours,
         defaultState: defaultState
@@ -24,12 +26,13 @@ function save_options() {
 function restore_options() {
     chrome.storage.sync.get({
         redmineAPIKey: "",
+        perPage: 250,
         enableInlineEdit: true,
         syncDevelopmentCostToEstimatedHours: false,
         defaultState: "categories"
     }, function (items) {
-        debugger
         document.getElementById('redmineAPIKey').value = items.redmineAPIKey;
+        document.getElementById('perPage').value = items.perPage;
         if (items.enableInlineEdit) {
             document.getElementById('enableInlineEdit').checked = 'checked';
         }
