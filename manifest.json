@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "name": "Visiativ Redmine polisher",
   "description": "This extension polish redmine ui",
-  "version": "1.12.3",
-  "version_name": "1.12.3",
+  "version": "1.12.4",
+  "version_name": "1.12.4",
   "applications": {
   "gecko": {
       "update_url": "https://toscer.me/addons/redmine-polisher/updates.json",
