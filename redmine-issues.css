@@ -12,6 +12,10 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/user-story.png");
 }
 
+.icon.icon-question, .icon.icon-question {
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/question.png");
+}
+
 .icon.icon-task, .icon.icon-tâches {
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/task.png");
 }
