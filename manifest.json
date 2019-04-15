@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "name": "Visiativ Redmine polisher",
   "description": "This extension polish redmine ui",
-  "version": "1.12.5",
-  "version_name": "1.12.5",
+  "version": "1.12.6",
+  "version_name": "1.12.6",
   "options_page": "options.html",
   "browser_action": {
     "default_icon": "icon.png"
