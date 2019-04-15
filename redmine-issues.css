@@ -12,7 +12,7 @@ span.icon{
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/user-story.png");
 }
 
-.icon.icon-question, .icon.icon-question {
+.icon.icon-questions, .icon.icon-question {
   background-image: url("chrome-extension://__MSG_@@extension_id__/images/question.png");
 }
 
