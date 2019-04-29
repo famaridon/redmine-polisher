@@ -396,10 +396,13 @@ function rebuildTracker(issue,tracker) {
     if(html.indexOf("R&amp;D INNOVATION - ") >= 0) {
         simpleTrackerHtml = html.substring("R&amp;D INNOVATION - ".length, html.length);
         simpleTrackerHtml = simpleTrackerHtml.toLowerCase().replace(new RegExp(' ', 'g'), '-');
-    } else if(html.indexOf("PROJET - ") >= 0) {
-        simpleTrackerHtml = html.substring("PROJET - ".length, html.length);
+    } else if(html.toLowerCase().indexOf("project - ") >= 0) {
+        simpleTrackerHtml = html.substring("PROJECT - ".length, html.length);
         simpleTrackerHtml = simpleTrackerHtml.toLowerCase().replace(new RegExp(' ', 'g'), '-');
-    }
+    } else if(html.toLowerCase().indexOf("projet - ") >= 0) {
+      simpleTrackerHtml = html.substring("PROJET - ".length, html.length);
+      simpleTrackerHtml = simpleTrackerHtml.toLowerCase().replace(new RegExp(' ', 'g'), '-');
+  }
 
     issue.find("td.subject").prepend($('<span class="icon icon-' + simpleTrackerHtml + '"></span>'));
 }
