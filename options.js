@@ -5,7 +5,7 @@ function save_options() {
     const syncDevelopmentCostToEstimatedHours = document.getElementById('syncDevelopmentCostToEstimatedHours').checked;
     const defaultState = document.getElementById('defaultState').value;
     const perPage = document.getElementById('perPage').value;
-    steStorage({
+    setStorage({
         redmineAPIKey: redmineAPIKey,
         perPage: perPage,
         enableInlineEdit: enableInlineEdit,
